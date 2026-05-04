@@ -1,0 +1,116 @@
+﻿@model List<Proyec_Agricola_Web.Models.Producto>
+
+@{
+    ViewBag.Title = "AgroVentas - Tienda de Productos Agrícolas";
+}
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <h1>Bienvenido a AgroVentas</h1>
+        <p>Tu tienda online de confianza para productos agrícolas de calidad superior</p>
+        <a href="@Url.Action("Productos", "Home")" class="btn btn-light btn-lg">
+            <i class="fas fa-shopping-bag"></i> Explorar Productos
+        </a>
+    </div>
+</div>
+
+<!-- Sección de características -->
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="feature-box">
+                <i class="fas fa-truck"></i>
+                <h4>Envío Rápido</h4>
+                <p>Entrega en 24-48 horas a toda la región</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-box">
+                <i class="fas fa-leaf"></i>
+                <h4>Productos 100% Naturales</h4>
+                <p>Seleccionados y certificados de calidad</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-box">
+                <i class="fas fa-headset"></i>
+                <h4>Soporte 24/7</h4>
+                <p>Equipo dedicado para ayudarte</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-box">
+                <i class="fas fa-money-bill-wave"></i>
+                <h4>Precios Competitivos</h4>
+                <p>Mejores precios del mercado garantizado</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Productos Destacados -->
+<div class="container my-5">
+    <h2 class="text-center mb-4" style="color: var(--color-dark); font-weight: 700;">
+        <i class="fas fa-star"></i> Productos Destacados
+    </h2>
+    <div class="row">
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var producto in Model.Take(3))
+            {
+                <div class="col-md-4">
+                    <div class="product-card">
+                        <div class="product-image">
+                            @if (!string.IsNullOrEmpty(producto.ImagenRuta))
+                            {
+                                <img src="@producto.ImagenRuta" alt="@producto.Nombre" />
+                            }
+                            else
+                            {
+                                <img src="/Content/Images/Productos/semillas-maiz.png" alt="@producto.Nombre" />
+                            }
+                            @if (producto.PrecioDescuento.HasValue && producto.PrecioDescuento > 0)
+                            {
+                                <span class="product-badge">Promoción</span>
+                            }
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">@producto.CategoriaNombre</span>
+                            <h5 class="product-title">@producto.Nombre</h5>
+                            <p class="product-description">@producto.Descripcion</p>
+                            <div class="product-price">@producto.Precio.ToString("C")</div>
+                            <div class="product-footer">
+                                <button class="btn btn-success" onclick="agregarAlCarrito(@producto.ProductoID, '@producto.Nombre')">
+                                    <i class="fas fa-cart-plus"></i> Agregar
+                                </button>
+                                <a href="@Url.Action("DetalleProducto", "Home", new { id = producto.ProductoID })" class="btn btn-outline-secondary">
+                                    Ver detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div style="background: linear-gradient(135deg, var(--color-primary) 0%, #1e8449 100%); color: white; padding: 60px 0; text-align: center; margin-top: 60px; border-radius: 20px;">
+    <div class="container">
+        <h2 style="font-weight: 700; margin-bottom: 20px;">¿Listo para mejorar tus cultivos?</h2>
+        <p style="font-size: 1.1rem; margin-bottom: 30px;">Accede a nuestro catálogo completo de productos agrícolas</p>
+        <a href="@Url.Action("Productos", "Home")" class="btn btn-light btn-lg">
+            <i class="fas fa-store"></i> Ver Todos los Productos
+        </a>
+    </div>
+</div>
+
+@section scripts {
+<script>
+    function agregarAlCarrito(id, nombre) {
+        alert('✓ ' + nombre + ' agregado al carrito exitosamente');
+    }
+</script>
+}

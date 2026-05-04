@@ -1,0 +1,49 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo -->
+  <rect width="200" height="200" fill="#f0f8f4"/>
+  
+  <!-- Sombra -->
+  <ellipse cx="100" cy="170" rx="60" ry="15" fill="rgba(0,0,0,0.1)"/>
+  
+  <!-- Botella de Pesticida -->
+  <g id="pesticide">
+    <!-- Botella principal -->
+    <path d="M 75 70 L 80 80 L 80 130 Q 80 145 90 150 L 110 150 Q 120 145 120 130 L 120 80 L 125 70 Z" 
+          fill="#E8F4F8" stroke="#5DADE2" stroke-width="2"/>
+    
+    <!-- Sombreado botella -->
+    <ellipse cx="85" cy="100" rx="3" ry="20" fill="rgba(0,0,0,0.05)"/>
+    
+    <!-- Tapa -->
+    <rect x="90" y="60" width="20" height="12" fill="#27AE60" stroke="#229954" stroke-width="1.5" rx="2"/>
+    <rect x="88" y="57" width="24" height="5" fill="#2ECC71" stroke="#229954" stroke-width="1" rx="1"/>
+    
+    <!-- Etiqueta de advertencia -->
+    <rect x="82" y="90" width="36" height="35" fill="#E74C3C" stroke="#C0392B" stroke-width="1.5" rx="2"/>
+    
+    <!-- Símbolo de advertencia -->
+    <text x="100" y="105" font-size="20" font-weight="bold" text-anchor="middle" fill="white">
+      ?
+    </text>
+    
+    <!-- Texto en etiqueta -->
+    <text x="100" y="125" font-size="7" font-weight="bold" text-anchor="middle" fill="white">
+      ORGÁNICO
+    </text>
+    
+    <!-- Brillo en la botella -->
+    <ellipse cx="88" cy="85" rx="4" ry="8" fill="white" opacity="0.3"/>
+    
+    <!-- Detalles de la botella -->
+    <line x1="80" y1="80" x2="120" y2="80" stroke="rgba(0,0,0,0.05)" stroke-width="1"/>
+    <line x1="78" y1="110" x2="122" y2="110" stroke="rgba(0,0,0,0.05)" stroke-width="1"/>
+    
+    <!-- Información adicional -->
+    <circle cx="100" cy="145" r="3" fill="#27AE60"/>
+  </g>
+  
+  <!-- Texto -->
+  <text x="100" y="170" font-size="12" font-weight="bold" text-anchor="middle" fill="#27AE60">
+    Pesticida Orgánico
+  </text>
+</svg>

@@ -1,0 +1,120 @@
+@model List<string>
+@{
+    ViewBag.Title = "Categorías de Productos - AgroVentas";
+}
+
+<!-- Breadcrumb -->
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item active">Categorías</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    <h1 style="color: var(--color-dark); font-weight: 700; margin-bottom: 30px;">
+        <i class="fas fa-list"></i> Categorías de Productos
+    </h1>
+
+    <div class="row">
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var categoria in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <a href="@Url.Action("ProductosPorCategoria", "Home", new { categoria = categoria })" 
+                       style="text-decoration: none; color: inherit;">
+                        <div class="card h-100" style="border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+                                 transition: all 0.3s ease; cursor: pointer;"
+                             onmouseover="this.style.boxShadow='0 8px 16px rgba(0,0,0,0.2)'; this.style.transform='translateY(-8px)';"
+                             onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'; this.style.transform='translateY(0)';">
+                            
+                            <div style="background: linear-gradient(135deg, var(--color-primary) 0%, #1e8449 100%); 
+                                      height: 200px; display: flex; align-items: center; justify-content: center;">
+                                @{
+                                    if (categoria == "Semillas")
+                                    {
+                                        <i class="fas fa-seedling" style="font-size: 100px; color: white; opacity: 0.8;"></i>
+                                    }
+                                    else if (categoria == "Fertilizantes")
+                                    {
+                                        <i class="fas fa-flask-vial" style="font-size: 100px; color: white; opacity: 0.8;"></i>
+                                    }
+                                    else if (categoria == "Pesticidas")
+                                    {
+                                        <i class="fas fa-spray-can" style="font-size: 100px; color: white; opacity: 0.8;"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-box" style="font-size: 100px; color: white; opacity: 0.8;"></i>
+                                    }
+                                }
+                            </div>
+                            
+                            <div class="card-body text-center">
+                                <h5 class="card-title" style="color: var(--color-dark); font-weight: 700;">
+                                    @categoria
+                                </h5>
+                                <p class="card-text text-muted">
+                                    Explorar esta categoría
+                                </p>
+                                <span class="btn btn-success btn-sm">
+                                    Ver Productos <i class="fas fa-arrow-right"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> No hay categorías disponibles.
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Sección adicional: Por qué comprar en AgroVentas -->
+    <div class="row mt-5 pt-5 border-top">
+        <div class="col-12">
+            <h2 style="color: var(--color-dark); font-weight: 700; text-align: center; margin-bottom: 40px;">
+                <i class="fas fa-star"></i> ¿Por qué comprar en AgroVentas?
+            </h2>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-box">
+                <i class="fas fa-certificate"></i>
+                <h4>Productos Certificados</h4>
+                <p>Todos nuestros productos están certificados y cumplen estándares de calidad internacionales.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-box">
+                <i class="fas fa-handshake"></i>
+                <h4>Garantía de Confianza</h4>
+                <p>Trabajamos con proveedores confiables para asegurar la mejor calidad en cada pedido.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-box">
+                <i class="fas fa-coins"></i>
+                <h4>Precios Justos</h4>
+                <p>Ofrecemos los mejores precios sin sacrificar la calidad de los productos.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-box">
+                <i class="fas fa-users"></i>
+                <h4>Comunidad de Agricultores</h4>
+                <p>Únete a miles de agricultores satisfechos que confían en nuestros productos.</p>
+            </div>
+        </div>
+    </div>
+</div>

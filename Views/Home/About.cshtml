@@ -1,0 +1,153 @@
+﻿@{
+    ViewBag.Title = "Sobre Nosotros - AgroVentas";
+}
+
+<!-- Breadcrumb -->
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item active">Sobre Nosotros</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6">
+            <h1 style="color: var(--color-dark); font-weight: 700; margin-bottom: 20px;">
+                <i class="fas fa-leaf"></i> Sobre AgroVentas
+            </h1>
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8;">
+                En <strong>AgroVentas</strong>, nos dedicamos a proporcionar productos agrícolas de la más alta calidad 
+                a agricultores profesionales y aficionados. Desde nuestros inicios, hemos mantenido un compromiso 
+                firme con la excelencia y la satisfacción del cliente.
+            </p>
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8;">
+                Nuestra misión es facilitar el acceso a productos agrícolas certificados y de confianza, 
+                ayudando a nuestros clientes a obtener mejores cosechas y resultados.
+            </p>
+        </div>
+        <div class="col-md-6">
+            <div style="background: linear-gradient(135deg, var(--color-primary) 0%, #1e8449 100%); 
+                      padding: 80px; border-radius: 12px; text-align: center; color: white;">
+                <i class="fas fa-store" style="font-size: 100px; opacity: 0.3;"></i>
+                <h3 style="margin-top: 20px; font-weight: 700;">Tu Tienda Agrícola de Confianza</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="row mb-5 text-center">
+        <div class="col-md-3">
+            <div class="feature-box">
+                <h3 style="color: var(--color-primary); font-weight: 700;">5000+</h3>
+                <p>Clientes Satisfechos</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-box">
+                <h3 style="color: var(--color-primary); font-weight: 700;">100+</h3>
+                <p>Productos Disponibles</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-box">
+                <h3 style="color: var(--color-primary); font-weight: 700;">24/7</h3>
+                <p>Atención al Cliente</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-box">
+                <h3 style="color: var(--color-primary); font-weight: 700;">10+</h3>
+                <p>Años de Experiencia</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Valores -->
+    <div class="row mb-5 border-top pt-5">
+        <div class="col-12">
+            <h2 style="color: var(--color-dark); font-weight: 700; text-align: center; margin-bottom: 40px;">
+                Nuestros Valores
+            </h2>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-box">
+                <i class="fas fa-check-circle"></i>
+                <h4>Calidad</h4>
+                <p>Nos comprometemos a ofrecer solo productos de la más alta calidad, certificados y probados.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-box">
+                <i class="fas fa-heart"></i>
+                <h4>Compromiso</h4>
+                <p>Estamos comprometidos con el éxito de nuestros clientes y su satisfacción total.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-box">
+                <i class="fas fa-leaf"></i>
+                <h4>Sostenibilidad</h4>
+                <p>Promovemos prácticas agrícolas sostenibles que cuidan el ambiente y el futuro.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Equipo -->
+    <div class="row mb-5 border-top pt-5">
+        <div class="col-12">
+            <h2 style="color: var(--color-dark); font-weight: 700; text-align: center; margin-bottom: 40px;">
+                Nuestro Equipo
+            </h2>
+        </div>
+        <div class="col-md-4">
+            <div class="text-center">
+                <div style="background-color: var(--color-light); border-radius: 50%; width: 150px; height: 150px; 
+                          margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-user-tie" style="font-size: 70px; color: var(--color-primary);"></i>
+                </div>
+                <h5 style="color: var(--color-dark); font-weight: 600;">Juan García</h5>
+                <p class="text-muted">Director General</p>
+                <p style="font-size: 0.9rem;">Experto en productos agrícolas con 15 años de experiencia.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="text-center">
+                <div style="background-color: var(--color-light); border-radius: 50%; width: 150px; height: 150px; 
+                          margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-user-tie" style="font-size: 70px; color: var(--color-secondary);"></i>
+                </div>
+                <h5 style="color: var(--color-dark); font-weight: 600;">María López</h5>
+                <p class="text-muted">Gerente de Operaciones</p>
+                <p style="font-size: 0.9rem;">Garantiza calidad en cada envío y entrega.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="text-center">
+                <div style="background-color: var(--color-light); border-radius: 50%; width: 150px; height: 150px; 
+                          margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-user-tie" style="font-size: 70px; color: var(--color-accent);"></i>
+                </div>
+                <h5 style="color: var(--color-dark); font-weight: 600;">Carlos Rodríguez</h5>
+                <p class="text-muted">Jefe de Soporte</p>
+                <p style="font-size: 0.9rem;">Asiste a clientes 24/7 con profesionalismo.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div style="background: linear-gradient(135deg, var(--color-primary) 0%, #1e8449 100%); color: white; 
+              padding: 60px 0; text-align: center; border-radius: 20px; margin-top: 60px;">
+        <div class="container">
+            <h2 style="font-weight: 700; margin-bottom: 20px;">¿Listo para empezar?</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 30px;">Explora nuestro catálogo y encuentra lo que necesitas</p>
+            <a href="@Url.Action("Productos", "Home")" class="btn btn-light btn-lg">
+                <i class="fas fa-shopping-bag"></i> Ver Productos
+            </a>
+        </div>
+    </div>
+</div>

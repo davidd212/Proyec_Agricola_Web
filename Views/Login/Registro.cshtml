@@ -1,0 +1,273 @@
+﻿@model Proyec_Agricola_Web.Models.Usuario
+
+@{
+    ViewBag.Title = "Crear Cuenta";
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+}
+
+<style>
+    .auth-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+        overflow: hidden;
+    }
+    .auth-card-header {
+        background: linear-gradient(135deg, #2e7d32, #43a047);
+        color: #fff;
+        padding: 24px 30px;
+        text-align: center;
+    }
+    .auth-card-header h3 { margin: 0; font-weight: 700; font-size: 1.4rem; }
+    .auth-card-body { padding: 28px 30px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-field { margin-bottom: 16px; }
+    .form-field.full { grid-column: 1 / -1; }
+    .form-field label {
+        display: block;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+        font-size: 0.875rem;
+    }
+    .form-field label span { color: #e53935; margin-left: 2px; }
+    .form-field .input-wrap { position: relative; }
+    .form-field input,
+    .form-field select {
+        width: 100%;
+        padding: 11px 14px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        box-sizing: border-box;
+        outline: none;
+        background: #fafafa;
+        transition: border-color 0.2s;
+        color: #333;
+    }
+    .form-field input:focus,
+    .form-field select:focus { border-color: #43a047; background: #fff; }
+    .form-field input.invalid { border-color: #e53935; }
+    .form-field .field-hint {
+        font-size: 0.78rem;
+        color: #888;
+        margin-top: 4px;
+    }
+    .form-field .field-icon {
+        position: absolute;
+        right: 12px; top: 50%;
+        transform: translateY(-50%);
+        color: #aaa;
+        cursor: pointer;
+    }
+    .form-field input[type=password] { padding-right: 40px; }
+
+    .pass-strength { height: 4px; border-radius: 4px; margin-top: 6px; background: #eee; overflow: hidden; }
+    .pass-strength-bar { height: 100%; width: 0; border-radius: 4px; transition: width 0.3s, background 0.3s; }
+
+    .btn-auth {
+        width: 100%;
+        padding: 13px;
+        background: linear-gradient(135deg, #2e7d32, #43a047);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: opacity 0.2s, transform 0.1s;
+        margin-top: 8px;
+    }
+    .btn-auth:hover { opacity: 0.92; transform: translateY(-1px); }
+    .alert-error {
+        background: #ffebee; color: #c62828;
+        border: 1px solid #ef9a9a; border-radius: 10px;
+        padding: 12px 16px; margin-bottom: 16px; font-size: 0.88rem;
+    }
+        .auth-footer { text-align: center; margin-top: 16px; color: #666; font-size: 0.88rem; }
+        .auth-footer a { color: #2e7d32; font-weight: 600; text-decoration: none; }
+        .auth-footer a:hover { text-decoration: underline; }
+
+        @@media (max-width: 540px) { .form-row { grid-template-columns: 1fr; } }
+    </style>
+
+<div class="auth-card">
+    <div class="auth-card-header">
+        <h3><i class="fas fa-user-plus me-2"></i>Crear Cuenta Nueva</h3>
+        <p style="margin:5px 0 0; opacity:0.85; font-size:0.85rem;">Completa todos los campos para registrarte</p>
+    </div>
+    <div class="auth-card-body">
+
+        @if (!string.IsNullOrEmpty(ViewBag.Mensaje)) {
+            <div class="alert-error">
+                <i class="fas fa-exclamation-circle"></i> @ViewBag.Mensaje
+            </div>
+        }
+
+        @using (Html.BeginForm("Registro", "Login", FormMethod.Post)) {
+            @Html.AntiForgeryToken()
+
+            <!-- Fila 1: Nombre de usuario (campo completo) -->
+            <div class="form-field">
+                <label>Nombre de Usuario <span>*</span></label>
+                <input type="text" name="Nombre" id="Nombre"
+                       placeholder="Ej: juan.perez"
+                       required minlength="3" maxlength="30"
+                       pattern="[a-zA-Z0-9._]+"
+                       title="Solo letras, numeros, puntos y guiones bajos (min. 3 caracteres)" />
+                <div class="field-hint">Min. 3 caracteres. Solo letras, numeros y puntos.</div>
+            </div>
+
+            <!-- Fila 2: Apellidos -->
+            <div class="form-row">
+                <div class="form-field">
+                    <label>Apellido Paterno <span>*</span></label>
+                    <input type="text" name="Apellido_Paterno"
+                           placeholder="Apellido paterno"
+                           required minlength="2" maxlength="50"
+                           pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+"
+                           title="Solo letras y espacios" />
+                </div>
+                <div class="form-field">
+                    <label>Apellido Materno <span>*</span></label>
+                    <input type="text" name="Apellido_Materno"
+                           placeholder="Apellido materno"
+                           required minlength="2" maxlength="50"
+                           pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+"
+                           title="Solo letras y espacios" />
+                </div>
+            </div>
+
+            <!-- Fila 3: Email y Telefono -->
+            <div class="form-row">
+                <div class="form-field">
+                    <label>Correo Electronico <span>*</span></label>
+                    <input type="email" name="Email"
+                           placeholder="correo@ejemplo.com"
+                           required maxlength="100" />
+                </div>
+                <div class="form-field">
+                    <label>Telefono <span>*</span></label>
+                    <input type="tel" name="Telefono"
+                           placeholder="10 digitos"
+                           required minlength="10" maxlength="15"
+                           pattern="[0-9+\-\s]+"
+                           title="Solo numeros (10 digitos)" />
+                </div>
+            </div>
+
+            <!-- Contrasena -->
+            <div class="form-field">
+                <label>Contrasena <span>*</span></label>
+                <div class="input-wrap">
+                    <input type="password" name="Contraseña" id="regPass"
+                           placeholder="Min. 8 caracteres"
+                           required minlength="8" maxlength="100"
+                           oninput="checkStrength(this.value)" />
+                    <i class="fas fa-eye field-icon" id="toggleRegPass" onclick="toggleRegPass()" style="cursor:pointer;"></i>
+                </div>
+                <div class="pass-strength"><div class="pass-strength-bar" id="strengthBar"></div></div>
+                <div class="field-hint" id="strengthText">Min. 8 caracteres, incluye numeros y mayusculas.</div>
+            </div>
+
+            <!-- Fila 4: Direccion (completa) -->
+            <div class="form-field">
+                <label>Direccion <span>*</span></label>
+                <input type="text" name="Direccion"
+                       placeholder="Calle, numero, colonia"
+                       required minlength="5" maxlength="200" />
+            </div>
+
+            <!-- Fila 5: Ciudad, CP y Genero -->
+            <div class="form-row">
+                <div class="form-field">
+                    <label>Ciudad <span>*</span></label>
+                    <input type="text" name="Ciudad"
+                           placeholder="Tu ciudad"
+                           required minlength="2" maxlength="100" />
+                </div>
+                <div class="form-field">
+                    <label>Codigo Postal <span>*</span></label>
+                    <input type="text" name="CodigoPostal"
+                           placeholder="5 digitos"
+                           required minlength="4" maxlength="10"
+                           pattern="[0-9]+"
+                           title="Solo numeros" />
+                </div>
+            </div>
+
+            <!-- Genero -->
+            <div class="form-field">
+                <label>Genero <span>*</span></label>
+                <select name="Genero" required>
+                    <option value="">-- Selecciona tu genero --</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Otro">Prefiero no decir</option>
+                </select>
+            </div>
+
+            <!-- Tipo de Usuario -->
+            <div class="form-field">
+                <label>Tipo de Usuario <span>*</span></label>
+                <select name="TipoUsuario" required>
+                    <option value="">-- Selecciona tu tipo de usuario --</option>
+                    <option value="2">Cliente</option>
+                    <option value="1">Administrador</option>
+                </select>
+                <div class="field-hint">Cliente: Para comprar productos | Administrador: Acceso total al sistema</div>
+            </div>
+
+            <button type="submit" class="btn-auth">
+                <i class="fas fa-user-check me-2"></i> Crear Mi Cuenta
+            </button>
+        }
+
+        <div class="auth-footer">
+            <hr style="margin:18px 0; border-color:#eee;" />
+            Ya tienes cuenta? <a href="@Url.Action("Index","Login")">Inicia sesion aqui</a>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script>
+function toggleRegPass() {
+    var input = document.getElementById('regPass');
+    var icon = document.getElementById('toggleRegPass');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+
+function checkStrength(val) {
+    var bar = document.getElementById('strengthBar');
+    var txt = document.getElementById('strengthText');
+    var score = 0;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^a-zA-Z0-9]/.test(val)) score++;
+
+    var colors = ['#e53935','#fb8c00','#fdd835','#43a047'];
+    var labels = ['Muy debil','Debil','Aceptable','Fuerte'];
+    var widths = ['25%','50%','75%','100%'];
+
+    if (val.length === 0) {
+        bar.style.width = '0'; txt.textContent = 'Min. 8 caracteres, incluye numeros y mayusculas.';
+    } else {
+        var idx = Math.min(score - 1, 3);
+        if (idx < 0) idx = 0;
+        bar.style.width = widths[idx];
+        bar.style.background = colors[idx];
+        txt.textContent = 'Seguridad: ' + labels[idx];
+        txt.style.color = colors[idx];
+    }
+}
+</script>
+}

@@ -1,0 +1,135 @@
+@{
+    ViewBag.Title = "Carrito de Compras - AgroVentas";
+}
+
+<!-- Breadcrumb -->
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item active">Carrito de Compras</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    <h1 style="color: var(--color-dark); font-weight: 700; margin-bottom: 30px;">
+        <i class="fas fa-shopping-cart"></i> Carrito de Compras
+    </h1>
+
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Carrito vacío -->
+            <div class="alert alert-info" role="alert" style="text-align: center; padding: 60px 20px;">
+                <i class="fas fa-info-circle" style="font-size: 48px; margin-bottom: 20px;"></i>
+                <h4>Tu carrito está vacío</h4>
+                <p class="text-muted mb-4">¡Empieza a comprar nuestros productos agrícolas!</p>
+                <a href="@Url.Action("Productos", "Home")" class="btn btn-success btn-lg">
+                    <i class="fas fa-shopping-bag"></i> Continuar Comprando
+                </a>
+            </div>
+
+            <!-- Ejemplo de carrito con productos (comentado) -->
+            <!--
+            <div class="cart-item">
+                <div class="cart-image">
+                    <i class="fas fa-seedling" style="font-size: 60px; color: var(--color-primary);"></i>
+                </div>
+                <div class="cart-details">
+                    <h5>Semillas de Maíz Premium</h5>
+                    <p class="text-muted">Categoría: Semillas</p>
+                    <div class="d-flex gap-3 align-items-center">
+                        <div class="input-group" style="width: 150px;">
+                            <button class="btn btn-outline-secondary" type="button">-</button>
+                            <input type="number" class="form-control text-center" value="2" min="1">
+                            <button class="btn btn-outline-secondary" type="button">+</button>
+                        </div>
+                        <button class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <div class="cart-price">31,00€</div>
+                    <small class="text-muted">15,50€ c/u</small>
+                </div>
+            </div>
+
+            <div class="cart-item">
+                <div class="cart-image">
+                    <i class="fas fa-flask-vial" style="font-size: 60px; color: var(--color-secondary);"></i>
+                </div>
+                <div class="cart-details">
+                    <h5>Fertilizante NPK Balanceado</h5>
+                    <p class="text-muted">Categoría: Fertilizantes</p>
+                    <div class="d-flex gap-3 align-items-center">
+                        <div class="input-group" style="width: 150px;">
+                            <button class="btn btn-outline-secondary" type="button">-</button>
+                            <input type="number" class="form-control text-center" value="1" min="1">
+                            <button class="btn btn-outline-secondary" type="button">+</button>
+                        </div>
+                        <button class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <div class="cart-price">25,00€</div>
+                    <small class="text-muted">25,00€ c/u</small>
+                </div>
+            </div>
+            -->
+        </div>
+
+        <!-- Resumen del carrito -->
+        <div class="col-md-4">
+            <div class="cart-summary">
+                <h4 style="color: var(--color-dark); font-weight: 700; margin-bottom: 20px;">
+                    Resumen del Pedido
+                </h4>
+                
+                <div class="cart-summary-row">
+                    <span>Subtotal:</span>
+                    <span>0,00€</span>
+                </div>
+                
+                <div class="cart-summary-row">
+                    <span>Envío:</span>
+                    <span>Gratis</span>
+                </div>
+                
+                <div class="cart-summary-row">
+                    <span>Impuestos:</span>
+                    <span>0,00€</span>
+                </div>
+                
+                <div class="cart-summary-row total">
+                    <span>Total:</span>
+                    <span>0,00€</span>
+                </div>
+
+                <button class="btn btn-success btn-lg w-100 mb-2" disabled>
+                    <i class="fas fa-credit-card"></i> Proceder al Pago
+                </button>
+                <a href="@Url.Action("Productos", "Home")" class="btn btn-outline-secondary w-100">
+                    <i class="fas fa-arrow-left"></i> Continuar Comprando
+                </a>
+            </div>
+
+            <!-- Beneficios -->
+            <div class="mt-4 p-4 bg-light rounded">
+                <h6 style="color: var(--color-dark); font-weight: 600; margin-bottom: 15px;">
+                    <i class="fas fa-check-circle" style="color: var(--color-primary);"></i> Beneficios
+                </h6>
+                <ul class="list-unstyled text-muted" style="font-size: 0.9rem;">
+                    <li><i class="fas fa-check" style="color: var(--color-primary); margin-right: 8px;"></i>Envío rápido</li>
+                    <li><i class="fas fa-check" style="color: var(--color-primary); margin-right: 8px;"></i>Pago seguro</li>
+                    <li><i class="fas fa-check" style="color: var(--color-primary); margin-right: 8px;"></i>Devoluciones fáciles</li>
+                    <li><i class="fas fa-check" style="color: var(--color-primary); margin-right: 8px;"></i>Soporte 24/7</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

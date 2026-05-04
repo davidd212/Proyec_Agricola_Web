@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - AgroVentas</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <!-- Navbar Superior -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top" style="background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%) !important;">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="@Url.Action("Index", "Home")" style="color: white; font-size: 1.5rem;">
+                <i class="fas fa-leaf" style="margin-right: 8px;"></i> AgroVentas
+            </a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" 
+                    title="Alternar navegación" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation" style="border-color: rgba(255,255,255,0.3);">
+                <span class="navbar-toggler-icon" style="background-image: url('data:image/svg+xml,%3csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 30 30%22%3e%3cpath stroke=%22rgba%28255,255,255,0.8%29%22 stroke-linecap=%22round%22 stroke-miterlimit=%2210%22 stroke-width=%222%22 d=%22M4 7h22M4 15h22M4 23h22%22/%3e%3c/svg%3e');"></span>
+            </button>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "Home")" style="color: white; transition: all 0.3s;">
+                            <i class="fas fa-home" style="margin-right: 5px;"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "Producto")" style="color: white; transition: all 0.3s;">
+                            <i class="fas fa-store" style="margin-right: 5px;"></i> Productos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Categorias", "Home")" style="color: white; transition: all 0.3s;">
+                            <i class="fas fa-list" style="margin-right: 5px;"></i> Categorías
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "Carrito")" style="color: white; transition: all 0.3s;">
+                            <i class="fas fa-shopping-cart" style="margin-right: 5px;"></i> Carrito <span id="carrito-cantidad" class="badge bg-warning text-dark">@(Session["CarritoCantidad"] ?? 0)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Contact", "Home")" style="color: white; transition: all 0.3s;">
+                            <i class="fas fa-envelope" style="margin-right: 5px;"></i> Contacto
+                        </a>
+                    </li>
+                </ul>
+
+                <div style="margin-left: 20px; display: flex; align-items: center; gap: 15px;">
+                    @if (Session["Nombre"] != null)
+                    {
+                        <div style="color: white; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-user-circle fa-lg"></i>
+                            <span style="font-weight: 500;">@Session["Nombre"]</span>
+                        </div>
+                        @Html.ActionLink("Cerrar Sesión", "Logout", "Login", new { }, new { @class = "btn btn-sm btn-light", style = "border-radius: 20px; padding: 6px 16px; font-size: 0.85rem; font-weight: 500;" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Iniciar Sesión", "Index", "Login", new { }, new { @class = "btn btn-sm btn-light", style = "border-radius: 20px; padding: 6px 16px; font-weight: 500;" })
+                    }
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- Barra de búsqueda -->
+    <div class="bg-light py-3 border-bottom" style="background: linear-gradient(135deg, #f5f5f5 0%, #eeeeee 100%) !important;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <form class="d-flex" method="get" action="@Url.Action("BuscarProductos", "Home")">
+                        <div class="input-group" style="box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-radius: 25px; overflow: hidden;">
+                            <input class="form-control" type="search" placeholder="🔍 Buscar productos..." 
+                                   name="q" aria-label="Buscar" style="border: none; padding: 12px 18px; font-size: 0.95rem;">
+                            <button class="btn btn-success" type="submit" style="border: none; background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); padding: 0 20px; font-weight: 600;">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-4 text-end d-flex align-items-center justify-content-end gap-2">
+                    <a href="@Url.Action("About", "Home")" class="btn btn-outline-success btn-sm" style="border-radius: 20px; padding: 8px 16px; font-size: 0.9rem; font-weight: 500;">
+                        <i class="fas fa-info-circle"></i> Sobre nosotros
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="main-content">
+        @RenderBody()
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5><i class="fas fa-leaf"></i> AgroVentas</h5>
+                    <p>Tu tienda de confianza para productos agrícolas de calidad.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Enlaces rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="@Url.Action("Index", "Home")" class="text-white-50 text-decoration-none">Inicio</a></li>
+                        <li><a href="@Url.Action("Index", "Producto")" class="text-white-50 text-decoration-none">Productos</a></li>
+                        <li><a href="@Url.Action("Contact", "Home")" class="text-white-50 text-decoration-none">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Contacto</h5>
+                    <p class="text-white-50">
+                        📧 info@@agroventas.com<br>
+                        📞 +52 687-145-08-04<br>
+                        📍 Av. Agrícola, 123
+                    </p>
+                </div>
+            </div>
+            <hr class="bg-white-50">
+            <div class="text-center">
+                <p>&copy; @DateTime.Now.Year - AgroVentas. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

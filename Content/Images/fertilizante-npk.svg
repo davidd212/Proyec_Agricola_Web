@@ -1,0 +1,44 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo -->
+  <rect width="200" height="200" fill="#f8f5f0"/>
+  
+  <!-- Sombra -->
+  <ellipse cx="100" cy="170" rx="60" ry="15" fill="rgba(0,0,0,0.1)"/>
+  
+  <!-- Bolsa de Fertilizante -->
+  <g id="fertilizer">
+    <!-- Bolsa principal -->
+    <path d="M 60 60 L 65 140 Q 65 150 75 150 L 125 150 Q 135 150 135 140 L 140 60 Q 140 55 135 55 L 65 55 Q 60 55 60 60 Z" 
+          fill="#D4A574" stroke="#8B6F47" stroke-width="2"/>
+    
+    <!-- Sombreado bolsa -->
+    <path d="M 70 60 L 75 80 L 75 150" fill="rgba(0,0,0,0.05)"/>
+    
+    <!-- Etiqueta -->
+    <rect x="70" y="70" width="60" height="50" fill="#2ECC71" stroke="#27AE60" stroke-width="1.5" rx="3"/>
+    
+    <!-- Texto en etiqueta -->
+    <text x="100" y="85" font-size="10" font-weight="bold" text-anchor="middle" fill="white">
+      NPK
+    </text>
+    <text x="100" y="100" font-size="8" text-anchor="middle" fill="white">
+      10-10-10
+    </text>
+    <text x="100" y="112" font-size="7" text-anchor="middle" fill="white">
+      Balanceado
+    </text>
+    
+    <!-- Líneas decorativas en la bolsa -->
+    <line x1="80" y1="130" x2="120" y2="130" stroke="rgba(0,0,0,0.1)" stroke-width="1"/>
+    <line x1="78" y1="140" x2="122" y2="140" stroke="rgba(0,0,0,0.1)" stroke-width="1"/>
+    
+    <!-- Pliegues de la bolsa -->
+    <path d="M 75 60 Q 85 75 75 140" stroke="rgba(0,0,0,0.1)" stroke-width="1" fill="none"/>
+    <path d="M 125 60 Q 115 75 125 140" stroke="rgba(0,0,0,0.1)" stroke-width="1" fill="none"/>
+  </g>
+  
+  <!-- Texto -->
+  <text x="100" y="170" font-size="12" font-weight="bold" text-anchor="middle" fill="#8B6F47">
+    Fertilizante NPK
+  </text>
+</svg>

@@ -1,0 +1,56 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo -->
+  <rect width="200" height="200" fill="#f0f8f0"/>
+  
+  <!-- Sombra -->
+  <ellipse cx="100" cy="170" rx="60" ry="15" fill="rgba(0,0,0,0.1)"/>
+  
+  <!-- Granos de maíz -->
+  <g id="corn">
+    <!-- Caparazón exterior -->
+    <path d="M 100 30 Q 85 50 85 70 L 85 120 Q 100 140 100 140 Q 100 140 115 120 L 115 70 Q 115 50 100 30 Z" fill="#F4D03F"/>
+    
+    <!-- Líneas decorativas -->
+    <line x1="90" y1="40" x2="90" y2="130" stroke="#E8C83A" stroke-width="1"/>
+    <line x1="100" y1="35" x2="100" y2="138" stroke="#E8C83A" stroke-width="1"/>
+    <line x1="110" y1="40" x2="110" y2="130" stroke="#E8C83A" stroke-width="1"/>
+    
+    <!-- Granos individuales -->
+    <g fill="#F39C12">
+      <ellipse cx="88" cy="50" rx="4" ry="5"/>
+      <ellipse cx="100" cy="45" rx="4" ry="5"/>
+      <ellipse cx="112" cy="50" rx="4" ry="5"/>
+      
+      <ellipse cx="85" cy="65" rx="4" ry="5"/>
+      <ellipse cx="100" cy="60" rx="4" ry="5"/>
+      <ellipse cx="115" cy="65" rx="4" ry="5"/>
+      
+      <ellipse cx="88" cy="80" rx="4" ry="5"/>
+      <ellipse cx="100" cy="75" rx="4" ry="5"/>
+      <ellipse cx="112" cy="80" rx="4" ry="5"/>
+      
+      <ellipse cx="85" cy="95" rx="4" ry="5"/>
+      <ellipse cx="100" cy="90" rx="4" ry="5"/>
+      <ellipse cx="115" cy="95" rx="4" ry="5"/>
+      
+      <ellipse cx="88" cy="110" rx="4" ry="5"/>
+      <ellipse cx="100" cy="105" rx="4" ry="5"/>
+      <ellipse cx="112" cy="110" rx="4" ry="5"/>
+      
+      <ellipse cx="85" cy="125" rx="4" ry="5"/>
+      <ellipse cx="100" cy="120" rx="4" ry="5"/>
+      <ellipse cx="115" cy="125" rx="4" ry="5"/>
+    </g>
+    
+    <!-- Hojas -->
+    <path d="M 75 80 Q 60 70 55 90" stroke="#27AE60" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 125 80 Q 140 70 145 90" stroke="#27AE60" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 70 100 Q 50 95 45 115" stroke="#2ECC71" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 130 100 Q 150 95 155 115" stroke="#2ECC71" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Texto -->
+  <text x="100" y="160" font-size="12" font-weight="bold" text-anchor="middle" fill="#27AE60">
+    Semillas de Maíz
+  </text>
+</svg>

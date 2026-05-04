@@ -1,0 +1,138 @@
+﻿@model List<Proyec_Agricola_Web.Models.Producto>
+
+
+
+@{
+    ViewBag.Title = "Cat�logo de Productos - AgroVentas";
+}
+
+<!-- Breadcrumb -->
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item active">Productos</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 style="color: var(--color-dark); font-weight: 700;">
+                <i class="fas fa-store"></i> Cat�logo de Productos
+            </h1>
+            @if (!string.IsNullOrEmpty(ViewBag.Busqueda))
+            {
+                <p class="text-muted">Resultados de b�squeda para: <strong>@ViewBag.Busqueda</strong></p>
+            }
+            @if (!string.IsNullOrEmpty(ViewBag.Categoria))
+            {
+                <p class="text-muted">Categor�a: <strong>@ViewBag.Categoria</strong></p>
+            }
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <form class="w-100 d-flex" method="get" action="@Url.Action("BuscarProductos", "Home")">
+                    <input type="text" class="form-control" placeholder="Buscar productos..." name="q" value="@ViewBag.Busqueda">
+                    <button class="btn btn-success" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="row mb-5">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-filter"></i> Filtros</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">Categor�as</h6>
+                    <div class="list-group">
+                        <a href="@Url.Action("Productos", "Home")" class="list-group-item list-group-item-action">
+                            Todas
+                        </a>
+                        <a href="@Url.Action("ProductosPorCategoria", "Home", new { categoria = "Semillas" })" class="list-group-item list-group-item-action">
+                            <i class="fas fa-leaf"></i> Semillas
+                        </a>
+                        <a href="@Url.Action("ProductosPorCategoria", "Home", new { categoria = "Fertilizantes" })" class="list-group-item list-group-item-action">
+                            <i class="fas fa-flask-vial"></i> Fertilizantes
+                        </a>
+                        <a href="@Url.Action("ProductosPorCategoria", "Home", new { categoria = "Pesticidas" })" class="list-group-item list-group-item-action">
+                            <i class="fas fa-spray-can"></i> Pesticidas
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            @if (Model == null || Model.Count == 0)
+            {
+                <div class="alert alert-info" role="alert">
+                    <i class="fas fa-info-circle"></i> No se encontraron productos. Intenta con otros criterios de b�squeda.
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    @foreach (var producto in Model)
+                    {
+                        <div class="col-md-6 col-lg-4">
+                            <div class="product-card">
+                                <div class="product-image" style="background:#f7fdf7; position:relative;">
+                                    @{
+                                        string imgSrc = "";
+                                        if (!string.IsNullOrEmpty(producto.ImagenRuta)) {
+                                            imgSrc = producto.ImagenRuta;
+                                        } else {
+                                            switch (producto.CategoriaNombre) {
+                                                case "Semillas": imgSrc = Url.Content("~/Content/Images/Productos/semillas-trigo.png"); break;
+                                                case "Fertilizantes": imgSrc = Url.Content("~/Content/Images/Productos/fertilizante-npk.png"); break;
+                                                case "Pesticidas": imgSrc = Url.Content("~/Content/Images/Productos/pesticida-organico.png"); break;
+                                                default: imgSrc = ""; break;
+                                            }
+                                        }
+                                    }
+                                    @if (!string.IsNullOrEmpty(imgSrc)) {
+                                        <img src="@imgSrc" alt="@producto.Nombre" style="width:100%; height:100%; object-fit:contain; padding:15px;" />
+                                    } else {
+                                        <i class="fas fa-seedling" style="font-size:80px; color:#28a745; opacity:0.18;"></i>
+                                    }
+                                </div>
+                                <div class="product-info">
+                                    <span class="product-category">@producto.CategoriaNombre</span>
+                                    <h5 class="product-title">@producto.Nombre</h5>
+                                    <p class="product-description">@producto.Descripcion</p>
+                                    <div class="product-price">@producto.Precio.ToString("C")</div>
+                                    <div class="product-footer">
+                                        <button class="btn btn-success flex-grow-1" onclick="agregarAlCarrito(@producto.ProductoID, '@producto.Nombre')">
+                                            <i class="fas fa-cart-plus"></i> Agregar
+                                        </button>
+                                        <a href="@Url.Action("DetalleProducto", "Home", new { id = producto.ProductoID })" class="btn btn-outline-secondary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        function agregarAlCarrito(id, nombre) {
+            alert('? ' + nombre + ' agregado al carrito exitosamente');
+        }
+    </script>
+}

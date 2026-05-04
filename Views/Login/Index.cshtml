@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.Title = "Iniciar Sesion";
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+}
+
+<style>
+    .auth-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+        overflow: hidden;
+    }
+    .auth-card-header {
+        background: linear-gradient(135deg, #2e7d32, #43a047);
+        color: #fff;
+        padding: 28px 30px;
+        text-align: center;
+    }
+    .auth-card-header h3 {
+        margin: 0;
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+    .auth-card-body { padding: 30px; }
+    .form-field { margin-bottom: 18px; }
+    .form-field label {
+        display: block;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 6px;
+        font-size: 0.9rem;
+    }
+    .form-field .input-wrap { position: relative; }
+    .form-field input {
+        width: 100%;
+        padding: 12px 44px 12px 14px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        transition: border-color 0.2s;
+        box-sizing: border-box;
+        outline: none;
+        background: #fafafa;
+    }
+    .form-field input:focus { border-color: #43a047; background: #fff; }
+    .form-field .field-icon {
+        position: absolute;
+        right: 14px; top: 50%;
+        transform: translateY(-50%);
+        color: #aaa;
+        cursor: pointer;
+    }
+    .btn-auth {
+        width: 100%;
+        padding: 13px;
+        background: linear-gradient(135deg, #2e7d32, #43a047);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: opacity 0.2s, transform 0.1s;
+        margin-top: 6px;
+    }
+    .btn-auth:hover { opacity: 0.92; transform: translateY(-1px); }
+    .auth-footer { text-align: center; margin-top: 20px; color: #666; font-size: 0.9rem; }
+    .auth-footer a { color: #2e7d32; font-weight: 600; text-decoration: none; }
+    .auth-footer a:hover { text-decoration: underline; }
+    .alert-error {
+        background: #ffebee;
+        color: #c62828;
+        border: 1px solid #ef9a9a;
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 18px;
+        font-size: 0.9rem;
+    }
+</style>
+
+<div class="auth-card">
+    <div class="auth-card-header">
+        <h3><i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesion</h3>
+        <p style="margin:6px 0 0; opacity:0.85; font-size:0.9rem;">Bienvenido de regreso</p>
+    </div>
+    <div class="auth-card-body">
+
+        @if (!string.IsNullOrEmpty(ViewBag.Mensaje)) {
+            <div class="alert-error">
+                <i class="fas fa-exclamation-circle"></i> @ViewBag.Mensaje
+            </div>
+        }
+
+        @using (Html.BeginForm("Autenticar", "Login", FormMethod.Post)) {
+            @Html.AntiForgeryToken()
+
+            <div class="form-field">
+                <label for="nombreUsuario">Usuario</label>
+                <div class="input-wrap">
+                    <input type="text" id="nombreUsuario" name="nombreUsuario"
+                           placeholder="Ingresa tu usuario"
+                           required minlength="3" maxlength="50"
+                           pattern="[a-zA-Z0-9._]+"
+                           title="Solo letras, numeros, puntos y guiones bajos" />
+                    <i class="fas fa-user field-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="contraseña">Contraseña</label>
+                <div class="input-wrap">
+                    <input type="password" id="contraseña" name="contraseña"
+                           placeholder="Ingresa tu contraseña"
+                           required minlength="6" maxlength="100" />
+                    <i class="fas fa-eye field-icon" id="togglePass" onclick="togglePassword()" style="cursor:pointer;"></i>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-auth">
+                <i class="fas fa-sign-in-alt me-2"></i> Iniciar Sesion
+            </button>
+        }
+
+        <div class="auth-footer">
+            <hr style="margin: 20px 0; border-color: #eee;" />
+            No tienes cuenta? <a href="@Url.Action("Registro","Login")">Registrate aqui</a>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script>
+function togglePassword() {
+    var input = document.getElementById('contraseña');
+    var icon = document.getElementById('togglePass');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+</script>
+}

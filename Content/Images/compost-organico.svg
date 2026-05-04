@@ -1,0 +1,58 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo -->
+  <rect width="200" height="200" fill="#f8f3f0"/>
+  
+  <!-- Sombra -->
+  <ellipse cx="100" cy="170" rx="60" ry="15" fill="rgba(0,0,0,0.1)"/>
+  
+  <!-- Bolsa de Compost -->
+  <g id="compost">
+    <!-- Bolsa principal -->
+    <path d="M 55 65 L 60 140 Q 60 152 72 155 L 128 155 Q 140 152 140 140 L 145 65 Q 145 60 140 60 L 60 60 Q 55 60 55 65 Z" 
+          fill="#8B6F47" stroke="#654321" stroke-width="2"/>
+    
+    <!-- Sombreado bolsa -->
+    <path d="M 65 65 L 70 85 L 70 155" fill="rgba(0,0,0,0.1)"/>
+    
+    <!-- Etiqueta grande -->
+    <rect x="65" y="75" width="70" height="50" fill="#27AE60" stroke="#229954" stroke-width="2" rx="4"/>
+    
+    <!-- Icono en etiqueta -->
+    <g fill="#2ECC71">
+      <circle cx="85" cy="90" r="6"/>
+      <circle cx="100" cy="85" r="6"/>
+      <circle cx="115" cy="90" r="6"/>
+      <circle cx="95" cy="100" r="6"/>
+      <circle cx="105" cy="100" r="6"/>
+    </g>
+    
+    <!-- Texto en etiqueta -->
+    <text x="100" y="117" font-size="10" font-weight="bold" text-anchor="middle" fill="white">
+      COMPOST
+    </text>
+    <text x="100" y="128" font-size="8" text-anchor="middle" fill="white">
+      ORGÁNICO
+    </text>
+    
+    <!-- Detalles de la bolsa -->
+    <line x1="75" y1="140" x2="125" y2="140" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <line x1="73" y1="150" x2="127" y2="150" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    
+    <!-- Pliegues -->
+    <path d="M 70 65 Q 80 80 70 155" stroke="rgba(0,0,0,0.15)" stroke-width="1.5" fill="none"/>
+    <path d="M 130 65 Q 120 80 130 155" stroke="rgba(0,0,0,0.15)" stroke-width="1.5" fill="none"/>
+    
+    <!-- Textura compost -->
+    <g fill="rgba(0,0,0,0.08)">
+      <circle cx="62" cy="145" r="2"/>
+      <circle cx="138" cy="148" r="2"/>
+      <circle cx="68" cy="152" r="1.5"/>
+      <circle cx="132" cy="151" r="1.5"/>
+    </g>
+  </g>
+  
+  <!-- Texto -->
+  <text x="100" y="175" font-size="12" font-weight="bold" text-anchor="middle" fill="#654321">
+    Compost Orgánico
+  </text>
+</svg>

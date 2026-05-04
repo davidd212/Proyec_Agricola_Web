@@ -1,0 +1,204 @@
+﻿﻿@model Proyec_Agricola_Web.Models.Producto
+@{
+    ViewBag.Title = Model.Nombre + " - AgroVentas";
+}
+
+<!-- Breadcrumb -->
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Productos", "Home")">Productos</a></li>
+                <li class="breadcrumb-item active">@Model.Nombre</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        <!-- Imagen del producto -->
+        <div class="col-md-5">
+            <div class="product-image" style="height:420px; border-radius:16px; box-shadow:0 6px 24px rgba(0,0,0,0.1); background:#f9fff9; overflow:hidden;">
+                @if (!string.IsNullOrEmpty(Model.ImagenRuta)) {
+                    <img src="@Model.ImagenRuta" alt="@Model.Nombre"
+                         style="width:100%; height:100%; object-fit:contain; padding:30px;"
+                         onerror="this.onerror=null; this.style.display='none'; document.getElementById('detImgFallback').style.display='flex';" />
+                    <div id="detImgFallback" style="display:none; height:100%; align-items:center; justify-content:center; flex-direction:column;">
+                        <i class="fas fa-seedling fa-5x" style="color:#28a745; opacity:0.2;"></i>
+                    </div>
+                } else {
+                    string fallbackPng = "";
+                    switch (Model.CategoriaNombre) {
+                        case "Semillas": fallbackPng = "/Content/Images/Productos/semillas-trigo.png"; break;
+                        case "Fertilizantes": fallbackPng = "/Content/Images/Productos/fertilizante-npk.png"; break;
+                        case "Pesticidas": fallbackPng = "/Content/Images/Productos/pesticida-organico.png"; break;
+                        default: fallbackPng = ""; break;
+                    }
+                    if (!string.IsNullOrEmpty(fallbackPng)) {
+                        <img src="@fallbackPng" alt="@Model.CategoriaNombre" style="width:100%; height:100%; object-fit:contain; padding:30px;" />
+                    } else {
+                        <div style="display:flex; align-items:center; justify-content:center; height:100%; flex-direction:column;">
+                            <i class="fas fa-seedling fa-5x" style="color:#28a745; opacity:0.2;"></i>
+                            <span class="text-muted mt-3">Sin imagen disponible</span>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+        </div>
+
+        <!-- Informaci�n del producto -->
+         <div class="col-md-7">
+             <span class="product-category mb-3">@Model.CategoriaNombre</span>
+            
+            <h1 style="color: var(--color-dark); font-weight: 700; margin-bottom: 20px;">
+                @Model.Nombre
+            </h1>
+
+            <!-- Rating (ejemplo) -->
+            <div class="mb-3">
+                <i class="fas fa-star" style="color: var(--color-accent);"></i>
+                <i class="fas fa-star" style="color: var(--color-accent);"></i>
+                <i class="fas fa-star" style="color: var(--color-accent);"></i>
+                <i class="fas fa-star" style="color: var(--color-accent);"></i>
+                <i class="fas fa-star-half-alt" style="color: var(--color-accent);"></i>
+                <span class="ms-2 text-muted">(45 rese�as)</span>
+            </div>
+
+            <!-- Precio -->
+            <div class="mb-4">
+                <h2 class="product-price">@Model.Precio.ToString("C")</h2>
+                <p class="text-success" style="font-weight: 600;">
+                    <i class="fas fa-check-circle"></i> En stock
+                </p>
+            </div>
+
+            <!-- Descripci�n -->
+            <div class="mb-4">
+                <h5 style="color: var(--color-dark); font-weight: 600;">Descripci�n</h5>
+                <p>@Model.Descripcion</p>
+            </div>
+
+            <!-- Cantidad -->
+            <div class="mb-4">
+                <label class="form-label" style="color: var(--color-dark); font-weight: 600;">Cantidad</label>
+                <div class="input-group" style="width: 150px;">
+                    <button class="btn btn-outline-secondary" type="button">-</button>
+                    <input type="number" class="form-control text-center" value="1" min="1">
+                    <button class="btn btn-outline-secondary" type="button">+</button>
+                </div>
+            </div>
+
+            <!-- Botones de acci�n -->
+            <div class="d-grid gap-2">
+                <button class="btn btn-success btn-lg mb-2" onclick="agregarAlCarrito()">
+                    <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                </button>
+                <button class="btn btn-outline-secondary btn-lg">
+                    <i class="fas fa-heart"></i> Agregar a Favoritos
+                </button>
+            </div>
+
+            <!-- Informaci�n adicional -->
+            <div class="mt-5 pt-4 border-top">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h6 style="color: var(--color-dark); font-weight: 600;">
+                            <i class="fas fa-truck"></i> Env�o
+                        </h6>
+                        <p class="text-muted">Env�o gratis a partir de 50�</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 style="color: var(--color-dark); font-weight: 600;">
+                            <i class="fas fa-shield-alt"></i> Garant�a
+                        </h6>
+                        <p class="text-muted">Garant�a de satisfacci�n 100%</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 style="color: var(--color-dark); font-weight: 600;">
+                            <i class="fas fa-undo"></i> Devoluciones
+                        </h6>
+                        <p class="text-muted">Devuelve en 30 d�as sin preguntas</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 style="color: var(--color-dark); font-weight: 600;">
+                            <i class="fas fa-lock"></i> Pago Seguro
+                        </h6>
+                        <p class="text-muted">Transacciones 100% seguras</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Productos relacionados -->
+    <div class="mt-5 pt-5 border-top">
+        <h3 style="color: var(--color-dark); font-weight: 700; margin-bottom: 30px;">
+            <i class="fas fa-link"></i> Productos Relacionados
+        </h3>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="/Content/Images/semillas-trigo.png" alt="Semillas de Trigo" style="width: 100%; height: 100%; object-fit: contain; padding: 20px;" />
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">Semillas</span>
+                        <h5 class="product-title">Semillas de Trigo</h5>
+                        <div class="product-price">12,00�</div>
+                        <button class="btn btn-success btn-sm w-100">Agregar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="/Content/Images/compost-organico.png" alt="Compost Org�nico" style="width: 100%; height: 100%; object-fit: contain; padding: 20px;" />
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">Fertilizantes</span>
+                        <h5 class="product-title">Compost Org�nico</h5>
+                        <div class="product-price">20,00�</div>
+                        <button class="btn btn-success btn-sm w-100">Agregar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="/Content/Images/herbicida-selectivo.png" alt="Herbicida Selectivo" style="width: 100%; height: 100%; object-fit: contain; padding: 20px;" />
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">Pesticidas</span>
+                        <h5 class="product-title">Herbicida Selectivo</h5>
+                        <div class="product-price">22,00�</div>
+                        <button class="btn btn-success btn-sm w-100">Agregar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="/Content/Images/semillas-maiz.png" alt="Semillas de Ma�z" style="width: 100%; height: 100%; object-fit: contain; padding: 20px;" />
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">Semillas</span>
+                        <h5 class="product-title">Semillas de Ma�z</h5>
+                        <div class="product-price">15,50�</div>
+                        <button class="btn btn-success btn-sm w-100">Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        function agregarAlCarrito() {
+            alert('? Producto agregado al carrito exitosamente');
+        }
+    </script>
+}

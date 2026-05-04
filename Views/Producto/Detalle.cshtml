@@ -1,0 +1,159 @@
+﻿﻿@model Proyec_Agricola_Web.Models.Producto
+
+@{
+    ViewBag.Title = Model.Nombre + " - AgroVentas";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div style="background:#f9fff9; border-radius:16px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+            @if (!string.IsNullOrEmpty(Model.ImagenRuta))
+            {
+                <img src="@Model.ImagenRuta" class="img-fluid" alt="@Model.Nombre" style="max-height:400px; width:100%; object-fit:contain; border-radius:12px; padding:10px; background:#fff;" onerror="this.onerror=null; this.src=\x27/Content/Images/Productos/no-image.png\x27;" />
+            }
+            else
+            {
+                <div class="bg-light d-flex flex-column align-items-center justify-content-center" style="height:400px; border-radius:12px;">
+                    <i class="fas fa-seedling fa-5x mb-3" style="color:#28a745; opacity:0.2;"></i>
+                    <span class="text-muted">Sin imagen disponible</span>
+                </div>
+            }
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h2>@Model.Nombre</h2>
+            <hr />
+
+            @if (!string.IsNullOrEmpty(Model.CategoriaNombre))
+            {
+                <p><strong>Categor�a:</strong> <a href="@Url.Action("Categoria", "Producto", new { id = Model.CategoriaID })">@Model.CategoriaNombre</a></p>
+            }
+
+            <p><strong>C�digo:</strong> @Model.CodigoProducto</p>
+
+            @if (Model.PrecioDescuento.HasValue && Model.PrecioDescuento > 0)
+            {
+                <h4>
+                    <span class="text-muted"><del>$@Model.Precio.ToString("F2")</del></span>
+                    <span class="text-danger font-weight-bold">$@Model.PrecioDescuento.Value.ToString("F2")</span>
+                </h4>
+                <p class="text-success">
+                    <strong>�Ahorra: $@(Model.Precio - Model.PrecioDescuento.Value).ToString("F2")!</strong>
+                </p>
+            }
+            else
+            {
+                <h4><span class="text-success font-weight-bold">$@Model.Precio.ToString("F2")</span></h4>
+            }
+
+            <div class="alert @(Model.Stock > 0 ? 'alert-success' : 'alert-danger')">
+                @if (Model.Stock > 0)
+                {
+                    <strong>En Stock:</strong> @Model.Stock unidades disponibles
+                }
+                else
+                {
+                    <strong>Producto Agotado</strong>
+                }
+            </div>
+
+            @if (Model.Peso.HasValue)
+            {
+                <p><strong>Peso:</strong> @Model.Peso.Value.ToString("F2") kg</p>
+            }
+
+            @if (Model.Calificacion.HasValue)
+            {
+                <p>
+                    <strong>Calificaci�n:</strong>
+                    @for (int i = 0; i < (int)Model.Calificacion; i++)
+                    {
+                        <i class="fas fa-star text-warning"></i>
+                    }
+                    (@Model.Calificacion.Value.ToString("F1")/)
+                </p>
+            }
+
+            <hr />
+
+            <h5>Descripci�n</h5>
+            <p>@Html.Raw(Model.Descripcion)</p>
+
+            <hr />
+
+            @if (Session["TipoUsuario"] != null && Convert.ToInt32(Session["TipoUsuario"]) == 1)
+            {
+                <div class="alert alert-warning">
+                    <i class="fa fa-shield"></i> Eres administrador, no puedes comprar. 
+                    <a href="@Url.Action("Editar", "Producto", new { id = Model.ProductoID })">Editar este producto</a>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label for="cantidad">Cantidad:</label>
+                    <input type="number" id="cantidad" min="1" max="@Model.Stock" value="1" class="form-control" style="width: 150px;" />
+                </div>
+
+                <button class="btn btn-success btn-lg" onclick="AgregarAlCarrito(@Model.ProductoID)" @(Model.Stock <= 0 ? 'disabled' : '')>
+                    <i class="fa fa-shopping-cart"></i> Agregar al Carrito
+                </button>
+
+                <button class="btn btn-outline-primary btn-lg">
+                    <i class="fa fa-heart"></i> Agregar a Favoritos
+                </button>
+            }
+
+            <div class="mt-4">
+                <a href="@Url.Action("Index", "Producto")" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left"></i> Volver al Cat�logo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h3>Productos Relacionados</h3>
+            <hr />
+            <p class="text-muted">Otros productos de la misma categor�a...</p>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+function AgregarAlCarrito(productoID) {
+    var cantidad = parseInt($('#cantidad').val());
+
+    if (cantidad <= 0) {
+        alert('Por favor ingresa una cantidad v�lida');
+        return;
+    }
+
+    $.ajax({
+        url: '@Url.Action("Agregar", "Carrito")',
+        type: 'POST',
+        data: {
+            productoID: productoID,
+            cantidad: cantidad
+        },
+        success: function (response) {
+            if (response.success) {
+                alert(response.message);
+                $('#cantidad').val(1);
+                // Redirigir al carrito despu�s de 2 segundos
+                setTimeout(function () {
+                    window.location.href = '@Url.Action("Index", "Carrito")';
+                }, 2000);
+            } else {
+                alert(response.message);
+            }
+        },
+        error: function () {
+            alert('Error al agregar el producto al carrito');
+        }
+    });
+}
+</script>

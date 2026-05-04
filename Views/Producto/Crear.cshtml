@@ -1,0 +1,217 @@
+﻿@model Proyec_Agricola_Web.Models.Producto
+
+@{
+    ViewBag.Title = "Crear Nuevo Producto - AgroVentas";
+}
+
+<style>
+    .upload-area {
+        border: 2px dashed #28a745;
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: #f9fff9;
+    }
+    .upload-area:hover { background: #e8f5e9; border-color: #1e7e34; }
+    .upload-area.dragover { background: #d4edda; }
+    .preview-img { max-height: 200px; border-radius: 10px; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .form-section { background: #fff; border-radius: 12px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); margin-bottom: 20px; }
+    .section-title { color: #28a745; font-weight: 700; border-bottom: 2px solid #e8f5e9; padding-bottom: 10px; margin-bottom: 20px; }
+</style>
+
+<div class="container mt-4 mb-5">
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+
+      <div class="d-flex align-items-center mb-4">
+        <a href="@Url.Action("Index","Producto")" class="btn btn-outline-secondary me-3">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+        <h2 class="mb-0"><i class="fas fa-plus-circle text-success me-2"></i>Crear Nuevo Producto</h2>
+      </div>
+
+      @if (ViewBag.Mensaje != null) {
+        <div class="alert alert-danger"><i class="fas fa-exclamation-circle me-2"></i>@ViewBag.Mensaje</div>
+      }
+
+      @using (Html.BeginForm("Crear","Producto", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+        @Html.AntiForgeryToken()
+
+        <!-- Imagen -->
+        <div class="form-section">
+          <h5 class="section-title"><i class="fas fa-image me-2"></i>Imagen del Producto</h5>
+          <div id="uploadArea" class="upload-area mb-3" onclick="document.getElementById('imagenFile').click()">
+            <div id="uploadPlaceholder">
+              <i class="fas fa-cloud-upload-alt fa-3x text-success mb-3 d-block"></i>
+              <p class="mb-1 fw-bold">Haz clic o arrastra una imagen aqui</p>
+              <small class="text-muted">JPG, PNG, GIF, WEBP - Maximo 5 MB</small>
+            </div>
+            <img id="previewImage" class="preview-img d-none" src="#" alt="Vista previa" />
+          </div>
+          <input type="file" id="imagenFile" name="imagenFile" accept="image/*" class="d-none" />
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form-label text-muted small">O ingresa una URL externa:</label>
+              @Html.TextBoxFor(m => m.ImagenRuta, new { @class = "form-control form-control-sm", @placeholder = "https://ejemplo.com/imagen.jpg", id = "imagenRutaInput" })
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-muted small">Nombre del archivo:</label>
+              @Html.TextBoxFor(m => m.Imagen, new { @class = "form-control form-control-sm", @placeholder = "nombre-imagen.jpg", id = "imagenNombreInput" })
+            </div>
+          </div>
+        </div>
+
+        <!-- Informacion -->
+        <div class="form-section">
+          <h5 class="section-title"><i class="fas fa-info-circle me-2"></i>Informacion del Producto</h5>
+          <div class="form-group mb-3">
+            <label class="form-label fw-bold">Categoria <span style="color: red;">*</span></label>
+            <select name="CategoriaID" class="form-select form-control" required>
+              <option value="">-- Selecciona una categoría --</option>
+              @if (ViewBag.Categorias != null)
+              {
+                  foreach (var categoria in ViewBag.Categorias)
+                  {
+                      <option value="@categoria.CategoriaID">@categoria.Nombre</option>
+                  }
+              }
+            </select>
+            @Html.ValidationMessageFor(m => m.CategoriaID, "", new { @class = "text-danger small" })
+          </div>
+          <div class="form-group mb-3">
+            <label class="form-label fw-bold">Nombre del Producto <span style="color: red;">*</span></label>
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", @placeholder = "Ej: Semillas de Trigo Premium", required = "required" })
+            @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger small" })
+          </div>
+          <div class="form-group mb-3">
+            <label class="form-label fw-bold">Descripcion Corta</label>
+            @Html.TextAreaFor(m => m.DescripcionCorta, new { @class = "form-control", @placeholder = "Descripcion breve", rows = 2 })
+            @Html.ValidationMessageFor(m => m.DescripcionCorta, "", new { @class = "text-danger small" })
+          </div>
+          <div class="form-group mb-3">
+            <label class="form-label fw-bold">Descripcion Completa</label>
+            @Html.TextAreaFor(m => m.Descripcion, new { @class = "form-control", @placeholder = "Descripcion detallada", rows = 4 })
+            @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger small" })
+          </div>
+        </div>
+
+        <!-- Precios y Stock -->
+        <div class="form-section">
+          <h5 class="section-title"><i class="fas fa-tag me-2"></i>Precios y Stock</h5>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Precio <span style="color: red;">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  @Html.TextBoxFor(m => m.Precio, new { @class = "form-control", @placeholder = "0.00", type = "number", step = "0.01", min = "0", required = "required" })
+                </div>
+                @Html.ValidationMessageFor(m => m.Precio, "", new { @class = "text-danger small" })
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Precio con Descuento (Opcional)</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  @Html.TextBoxFor(m => m.PrecioDescuento, new { @class = "form-control", @placeholder = "0.00", type = "number", step = "0.01", min = "0" })
+                </div>
+                @Html.ValidationMessageFor(m => m.PrecioDescuento, "", new { @class = "text-danger small" })
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Stock <span style="color: red;">*</span></label>
+                @Html.TextBoxFor(m => m.Stock, new { @class = "form-control", type = "number", min = "0", required = "required" })
+                @Html.ValidationMessageFor(m => m.Stock, "", new { @class = "text-danger small" })
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Peso (kg)</label>
+                @Html.TextBoxFor(m => m.Peso, new { @class = "form-control", type = "number", step = "0.001", min = "0" })
+                @Html.ValidationMessageFor(m => m.Peso, "", new { @class = "text-danger small" })
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Codigo del Producto</label>
+                @Html.TextBoxFor(m => m.CodigoProducto, new { @class = "form-control", @placeholder = "SEM-TRI-001" })
+                @Html.ValidationMessageFor(m => m.CodigoProducto, "", new { @class = "text-danger small" })
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Opciones -->
+        <div class="form-section">
+          <h5 class="section-title"><i class="fas fa-cog me-2"></i>Opciones</h5>
+          <div class="form-check form-switch">
+            @Html.CheckBoxFor(m => m.Destacado, new { @class = "form-check-input", role = "switch", id = "switchDestacado" })
+            <label class="form-check-label fw-bold" for="switchDestacado">
+              <i class="fas fa-star text-warning me-1"></i> Marcar como Producto Destacado
+            </label>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-2">
+          <button type="submit" class="btn btn-success btn-lg px-4">
+            <i class="fas fa-save me-2"></i> Crear Producto
+          </button>
+          <a href="@Url.Action("Index","Producto")" class="btn btn-outline-secondary btn-lg px-4">
+            <i class="fas fa-times me-2"></i> Cancelar
+          </a>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('imagenFile').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+        var preview = document.getElementById('previewImage');
+        preview.src = ev.target.result;
+        preview.classList.remove('d-none');
+        document.getElementById('uploadPlaceholder').classList.add('d-none');
+    };
+    reader.readAsDataURL(file);
+    document.getElementById('imagenNombreInput').value = file.name;
+});
+
+var uploadArea = document.getElementById('uploadArea');
+uploadArea.addEventListener('dragover', function(e) { e.preventDefault(); uploadArea.classList.add('dragover'); });
+uploadArea.addEventListener('dragleave', function() { uploadArea.classList.remove('dragover'); });
+uploadArea.addEventListener('drop', function(e) {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+        document.getElementById('imagenFile').files = files;
+        document.getElementById('imagenFile').dispatchEvent(new Event('change'));
+    }
+});
+
+document.getElementById('imagenRutaInput').addEventListener('input', function() {
+    var url = this.value.trim();
+    if (url) {
+        var preview = document.getElementById('previewImage');
+        preview.src = url;
+        preview.onload = function() {
+            preview.classList.remove('d-none');
+            document.getElementById('uploadPlaceholder').classList.add('d-none');
+        };
+        preview.onerror = function() {
+            preview.classList.add('d-none');
+            document.getElementById('uploadPlaceholder').classList.remove('d-none');
+        };
+    }
+});
+</script>

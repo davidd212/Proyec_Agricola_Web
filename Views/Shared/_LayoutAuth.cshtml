@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - AgroVentas</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        body {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .auth-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .auth-brand {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .auth-brand a {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2e7d32;
+            text-decoration: none;
+        }
+        .auth-brand a:hover { color: #1b5e20; }
+        .auth-brand small {
+            display: block;
+            color: #558b2f;
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div style="width:100%; max-width:520px;">
+            <div class="auth-brand">
+                <a href="@Url.Action("Index","Home")">
+                    <i class="fas fa-leaf"></i> AgroVentas
+                </a>
+                <small>Tu tienda agricola de confianza</small>
+            </div>
+            @RenderBody()
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

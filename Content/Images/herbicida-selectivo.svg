@@ -1,0 +1,55 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo -->
+  <rect width="200" height="200" fill="#f5f0f8"/>
+  
+  <!-- Sombra -->
+  <ellipse cx="100" cy="170" rx="60" ry="15" fill="rgba(0,0,0,0.1)"/>
+  
+  <!-- Botella de Herbicida -->
+  <g id="herbicide">
+    <!-- Botella principal -->
+    <path d="M 70 75 L 75 85 L 75 135 Q 75 148 87 153 L 113 153 Q 125 148 125 135 L 125 85 L 130 75 Z" 
+          fill="#FFF8E1" stroke="#F39C12" stroke-width="2"/>
+    
+    <!-- Sombreado botella -->
+    <ellipse cx="80" cy="105" rx="3" ry="25" fill="rgba(0,0,0,0.05)"/>
+    
+    <!-- Tapa spray -->
+    <rect x="92" y="60" width="16" height="18" fill="#8B4513" stroke="#6B3410" stroke-width="1.5" rx="2"/>
+    <path d="M 95 58 L 95 55 M 105 58 L 105 55" stroke="#8B4513" stroke-width="2" stroke-linecap="round"/>
+    <rect x="88" y="54" width="24" height="5" fill="#A0522D" stroke="#6B3410" stroke-width="1" rx="1"/>
+    
+    <!-- Etiqueta principal -->
+    <rect x="80" y="95" width="40" height="40" fill="#F39C12" stroke="#E67E22" stroke-width="1.5" rx="3"/>
+    
+    <!-- Icono de hoja en etiqueta -->
+    <g fill="#27AE60">
+      <path d="M 100 105 Q 95 100 90 105" stroke="#27AE60" stroke-width="1.5" fill="none"/>
+      <path d="M 100 105 Q 105 100 110 105" stroke="#27AE60" stroke-width="1.5" fill="none"/>
+    </g>
+    
+    <!-- Texto en etiqueta -->
+    <text x="100" y="122" font-size="8" font-weight="bold" text-anchor="middle" fill="white">
+      HERBICIDA
+    </text>
+    <text x="100" y="132" font-size="7" text-anchor="middle" fill="white">
+      SELECTIVO
+    </text>
+    
+    <!-- Líneas decorativas -->
+    <line x1="75" y1="85" x2="125" y2="85" stroke="rgba(0,0,0,0.05)" stroke-width="1"/>
+    <line x1="73" y1="115" x2="127" y2="115" stroke="rgba(0,0,0,0.05)" stroke-width="1"/>
+    
+    <!-- Brillo -->
+    <ellipse cx="83" cy="90" rx="5" ry="10" fill="white" opacity="0.4"/>
+    
+    <!-- Gotas -->
+    <circle cx="85" cy="150" r="2" fill="#F39C12" opacity="0.6"/>
+    <circle cx="115" cy="148" r="2.5" fill="#F39C12" opacity="0.6"/>
+  </g>
+  
+  <!-- Texto -->
+  <text x="100" y="175" font-size="12" font-weight="bold" text-anchor="middle" fill="#8B4513">
+    Herbicida Selectivo
+  </text>
+</svg>

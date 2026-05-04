@@ -1,0 +1,281 @@
+﻿@{
+    ViewBag.Title = "Contacto - AgroVentas";
+}
+
+<!-- Breadcrumb -->
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item active">Contacto</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    <h1 style="color: var(--color-dark); font-weight: 700; margin-bottom: 10px;">
+        <i class="fas fa-envelope"></i> Contacto
+    </h1>
+    <p class="text-muted mb-5">Estamos aquí para ayudarte. Completa el formulario o comunícate con nosotros por los medios disponibles.</p>
+
+    <div class="row">
+        <!-- Información de contacto -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100" style="border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <div class="card-body">
+                    <h5 style="color: var(--color-dark); font-weight: 600; margin-bottom: 20px;">
+                        <i class="fas fa-map-marker-alt" style="color: var(--color-primary); margin-right: 10px;"></i>
+                        Dirección
+                    </h5>
+                    <address style="color: #666;">
+                        Avenida Agrícola, 123<br>
+                        28001 Madrid<br>
+                        España
+                    </address>
+                </div>
+            </div>
+
+            <div class="card mt-3" style="border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <div class="card-body">
+                    <h5 style="color: var(--color-dark); font-weight: 600; margin-bottom: 20px;">
+                        <i class="fas fa-phone" style="color: var(--color-primary); margin-right: 10px;"></i>
+                        Teléfono
+                    </h5>
+                    <p style="color: #666;">
+                        <strong>Ventas:</strong><br>
+                        <a href="tel:+34912345678" style="color: var(--color-primary); text-decoration: none;">
+                            +34 91 234 5678
+                        </a>
+                    </p>
+                    <p style="color: #666;">
+                        <strong>Soporte:</strong><br>
+                        <a href="tel:+34912345679" style="color: var(--color-primary); text-decoration: none;">
+                            +34 91 234 5679
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="card mt-3" style="border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <div class="card-body">
+                    <h5 style="color: var(--color-dark); font-weight: 600; margin-bottom: 20px;">
+                        <i class="fas fa-envelope" style="color: var(--color-primary); margin-right: 10px;"></i>
+                        Email
+                    </h5>
+                    <p style="color: #666;">
+                        <strong>Información:</strong><br>
+                        <a href="mailto:info@agroventas.com" style="color: var(--color-primary); text-decoration: none;">
+                            info@agroventas.com
+                        </a>
+                    </p>
+                    <p style="color: #666;">
+                        <strong>Soporte:</strong><br>
+                        <a href="mailto:soporte@agroventas.com" style="color: var(--color-primary); text-decoration: none;">
+                            soporte@agroventas.com
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="card mt-3" style="border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <div class="card-body">
+                    <h5 style="color: var(--color-dark); font-weight: 600; margin-bottom: 20px;">
+                        <i class="fas fa-clock" style="color: var(--color-primary); margin-right: 10px;"></i>
+                        Horarios
+                    </h5>
+                    <p style="color: #666;">
+                        <strong>Lunes - Viernes:</strong><br>
+                        08:00 - 20:00
+                    </p>
+                    <p style="color: #666;">
+                        <strong>Sábado:</strong><br>
+                        09:00 - 14:00
+                    </p>
+                    <p style="color: #666;">
+                        <strong>Domingo:</strong><br>
+                        Cerrado
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de contacto -->
+        <div class="col-md-8">
+            <div class="card" style="border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <div class="card-header" style="background: linear-gradient(135deg, var(--color-primary) 0%, #1e8449 100%); color: white;">
+                    <h5 class="mb-0">Envíanos un mensaje</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" action="" id="contactForm">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="nombre">Nombre</label>
+                                <input class="form-control" type="text" id="nombre" name="nombre" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="email">Email</label>
+                                <input class="form-control" type="email" id="email" name="email" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="telefono">Teléfono</label>
+                                <input class="form-control" type="tel" id="telefono" name="telefono">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="asunto">Asunto</label>
+                                <select class="form-control" id="asunto" name="asunto" required>
+                                    <option value="">Selecciona un asunto</option>
+                                    <option value="producto">Consulta sobre producto</option>
+                                    <option value="pedido">Información de pedido</option>
+                                    <option value="devolucion">Devoluciones</option>
+                                    <option value="soporte">Soporte técnico</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="mensaje">Mensaje</label>
+                            <textarea class="form-control" id="mensaje" name="mensaje" rows="6" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="privacidad" name="privacidad" required>
+                                <label class="form-check-label" for="privacidad">
+                                    Acepto la <a href="#" style="color: var(--color-primary);">política de privacidad</a>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg" onclick="return validarFormulario();">
+                            <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preguntas frecuentes -->
+    <div class="row mt-5 pt-5 border-top">
+        <div class="col-12">
+            <h2 style="color: var(--color-dark); font-weight: 700; text-align: center; margin-bottom: 40px;">
+                <i class="fas fa-question-circle"></i> Preguntas Frecuentes
+            </h2>
+        </div>
+        <div class="col-md-6">
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; overflow: hidden;">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" 
+                                style="background-color: transparent; color: var(--color-dark); font-weight: 600;">
+                            ¿Cuáles son los tiempos de envío?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Realizamos envíos en 24-48 horas. El tiempo de entrega dependerá de tu ubicación geográfica.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; overflow: hidden;">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" 
+                                style="background-color: transparent; color: var(--color-dark); font-weight: 600;">
+                            ¿Ofrecen garantía en los productos?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Sí, todos nuestros productos tienen garantía de satisfacción 100%. Si no estás satisfecho, devuelve el producto en 30 días.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; overflow: hidden;">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" 
+                                style="background-color: transparent; color: var(--color-dark); font-weight: 600;">
+                            ¿Tienen envío gratis?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Ofrecemos envío gratis para pedidos superiores a 50€. Para pedidos menores, el envío tiene un costo de 5€.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="accordion">
+                <div class="accordion-item" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; overflow: hidden;">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" 
+                                style="background-color: transparent; color: var(--color-dark); font-weight: 600;">
+                            ¿Qué métodos de pago aceptan?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            Aceptamos tarjetas de crédito/débito, transferencia bancaria y PayPal. Todos los pagos son 100% seguros.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; overflow: hidden;">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" 
+                                style="background-color: transparent; color: var(--color-dark); font-weight: 600;">
+                            ¿Hacen envíos internacionales?
+                        </button>
+                    </h2>
+                    <div id="faq5" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            Actualmente solo realizamos envíos dentro del territorio español. Pronto ampliaremos a nivel europeo.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; overflow: hidden;">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6" 
+                                style="background-color: transparent; color: var(--color-dark); font-weight: 600;">
+                            ¿Tienen descuentos para compras al por mayor?
+                        </button>
+                    </h2>
+                    <div id="faq6" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            Sí, ofrecemos descuentos especiales para compras al por mayor. Contacta a nuestro equipo de ventas para más información.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        function validarFormulario() {
+            var nombre = document.getElementById('nombre').value;
+            var email = document.getElementById('email').value;
+            var mensaje = document.getElementById('mensaje').value;
+
+            if (nombre.trim() === '' || email.trim() === '' || mensaje.trim() === '') {
+                alert('Por favor completa todos los campos requeridos.');
+                return false;
+            }
+
+            alert('¡Gracias! Tu mensaje ha sido enviado exitosamente. Nos pondremos en contacto pronto.');
+            return false; // Prevent actual form submission for demo
+        }
+    </script>
+}

@@ -1,0 +1,181 @@
+@model List<Proyec_Agricola_Web.Models.Producto>
+
+@{
+    ViewBag.Title = "Productos - AgroVentas";
+}
+
+<div class="container mt-5">
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Catálogo de Productos</h2>
+            @if (Session["TipoUsuario"] != null && Convert.ToInt32(Session["TipoUsuario"]) == 1)
+            {
+                <a href="@Url.Action("Crear", "Producto")" class="btn btn-success btn-lg">
+                    <i class="fas fa-plus"></i> Crear Nuevo Producto
+                </a>
+            }
+        </div>
+        <hr />
+
+            @if (ViewBag.Busqueda != null)
+            {
+                <p>Resultados para: <strong>@ViewBag.Busqueda</strong></p>
+            }
+
+            @if (ViewBag.Categoria != null)
+            {
+                <p>Categoría: <strong>@ViewBag.Categoria</strong></p>
+            }
+        </div>
+    </div>
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="alert alert-info mt-4">
+            <p>No hay productos disponibles.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row mt-4">
+            @foreach (var producto in Model)
+            {
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        @if (!string.IsNullOrEmpty(producto.ImagenRuta))
+                        {
+                            <img src="@producto.ImagenRuta" class="card-img-top" alt="@producto.Nombre" style="height: 250px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                            </div>
+                        }
+
+                        <div class="card-body">
+                            <h5 class="card-title">@producto.Nombre</h5>
+                            <p class="card-text text-muted">@Html.Raw(producto.DescripcionCorta ?? producto.Descripcion?.Substring(0, Math.Min(100, producto.Descripcion.Length)) + "...")</p>
+
+                            @if (producto.PrecioDescuento.HasValue && producto.PrecioDescuento > 0)
+                            {
+                                <p class="card-text">
+                                    <span class="text-muted"><del>$@producto.Precio.ToString("F2")</del></span>
+                                    <span class="text-danger font-weight-bold">$@producto.PrecioDescuento.Value.ToString("F2")</span>
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="card-text">
+                                    <span class="text-success font-weight-bold">$@producto.Precio.ToString("F2")</span>
+                                </p>
+                            }
+
+                            @if (producto.Stock > 0)
+                            {
+                                <small class="text-muted">Stock: <span class="badge bg-info">@producto.Stock</span></small>
+                            }
+                            else
+                            {
+                                <small class="text-danger font-weight-bold">Agotado</small>
+                            }
+                        </div>
+
+                        <div class="card-footer bg-white">
+                            @if (Session["TipoUsuario"] != null && Convert.ToInt32(Session["TipoUsuario"]) == 1)
+                            {
+                                <div class="alert alert-warning mb-0 py-2">
+                                    <small><i class="fa fa-shield"></i> Eres administrador</small>
+                                </div>
+                                <div class="mt-2">
+                                    <a href="@Url.Action("Editar", "Producto", new { id = producto.ProductoID })" class="btn btn-warning btn-sm btn-block mb-1">
+                                        <i class="fa fa-edit"></i> Editar
+                                    </a>
+                                    <button class="btn btn-danger btn-sm btn-block" onclick="EliminarProductoAdmin(@producto.ProductoID)">
+                                        <i class="fa fa-trash"></i> Eliminar
+                                    </button>
+                                </div>
+                            }
+                            else
+                            {
+                                if (producto.Stock > 0)
+                                {
+                                    <div class="input-group mb-2">
+                                        <input type="number" id="cantidad_@producto.ProductoID" min="1" max="@producto.Stock" value="1" class="form-control" style="width: 60px;" />
+                                        <button class="btn btn-primary" onclick="AgregarAlCarrito(@producto.ProductoID)" title="Agregar al carrito">
+                                            <i class="fa fa-shopping-cart"></i> Agregar
+                                        </button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-secondary btn-block" disabled>
+                                        <i class="fa fa-ban"></i> Agotado
+                                    </button>
+                                }
+                                <a href="@Url.Action("Detalle", "Producto", new { id = producto.ProductoID })" class="btn btn-outline-secondary btn-sm btn-block">
+                                    <i class="fa fa-eye"></i> Ver Detalles
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+function AgregarAlCarrito(productoID) {
+    var cantidad = parseInt($('#cantidad_' + productoID).val());
+
+    if (cantidad <= 0) {
+        alert('Por favor ingresa una cantidad válida');
+        return;
+    }
+
+    $.ajax({
+        url: '@Url.Action("Agregar", "Carrito")',
+        type: 'POST',
+        data: {
+            productoID: productoID,
+            cantidad: cantidad
+        },
+        success: function (response) {
+            if (response.success) {
+                alert(response.message);
+                // Actualizar cantidad en el header
+                $('#carrito-cantidad').text(response.cantidad);
+                $('#cantidad_' + productoID).val(1);
+            } else {
+                alert(response.message);
+            }
+        },
+        error: function () {
+            alert('Error al agregar el producto al carrito');
+        }
+    });
+}
+
+function EliminarProductoAdmin(productoID) {
+    if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+        $.ajax({
+            url: '@Url.Action("Eliminar", "Producto")',
+            type: 'POST',
+            data: { id: productoID },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert('Error al eliminar el producto');
+            }
+        });
+    }
+}
+</script>
