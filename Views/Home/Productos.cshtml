@@ -3,7 +3,7 @@
 
 
 @{
-    ViewBag.Title = "Cat�logo de Productos - AgroVentas";
+    ViewBag.Title = "Catálogo de Productos - AgroVentas";
 }
 
 <!-- Breadcrumb -->
@@ -22,15 +22,15 @@
     <div class="row mb-4">
         <div class="col-md-8">
             <h1 style="color: var(--color-dark); font-weight: 700;">
-                <i class="fas fa-store"></i> Cat�logo de Productos
+                <i class="fas fa-store"></i> Catálogo de Productos
             </h1>
             @if (!string.IsNullOrEmpty(ViewBag.Busqueda))
             {
-                <p class="text-muted">Resultados de b�squeda para: <strong>@ViewBag.Busqueda</strong></p>
+                <p class="text-muted">Resultados de búsqueda para: <strong>@ViewBag.Busqueda</strong></p>
             }
             @if (!string.IsNullOrEmpty(ViewBag.Categoria))
             {
-                <p class="text-muted">Categor�a: <strong>@ViewBag.Categoria</strong></p>
+                <p class="text-muted">categoría: <strong>@ViewBag.Categoria</strong></p>
             }
         </div>
         <div class="col-md-4">
@@ -53,7 +53,7 @@
                     <h5 class="mb-0"><i class="fas fa-filter"></i> Filtros</h5>
                 </div>
                 <div class="card-body">
-                    <h6 class="fw-bold mb-3">Categor�as</h6>
+                    <h6 class="fw-bold mb-3">categorías</h6>
                     <div class="list-group">
                         <a href="@Url.Action("Productos", "Home")" class="list-group-item list-group-item-action">
                             Todas
@@ -76,7 +76,7 @@
             @if (Model == null || Model.Count == 0)
             {
                 <div class="alert alert-info" role="alert">
-                    <i class="fas fa-info-circle"></i> No se encontraron productos. Intenta con otros criterios de b�squeda.
+                    <i class="fas fa-info-circle"></i> No se encontraron productos. Intenta con otros criterios de búsqueda.
                 </div>
             }
             else
@@ -132,7 +132,22 @@
 @section scripts {
     <script>
         function agregarAlCarrito(id, nombre) {
-            alert('? ' + nombre + ' agregado al carrito exitosamente');
+            $.ajax({
+                url: '@Url.Action("Agregar", "Carrito")',
+                type: 'POST',
+                data: { productoID: id, cantidad: 1 },
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#carrito-cantidad').text(response.cantidad);
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert('Error al agregar el producto al carrito');
+                }
+            });
         }
     </script>
 }

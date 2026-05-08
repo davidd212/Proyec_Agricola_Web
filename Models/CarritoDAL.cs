@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -55,7 +55,7 @@ namespace Proyec_Agricola_Web.Models
             return carrito;
         }
 
-        // Obtener carrito por sesión (usuarios no registrados)
+        // Obtener carrito por sesion (usuarios no registrados)
         public Carrito ObtenerCarritoPorSesion(string sesionID)
         {
             Carrito carrito = null;
@@ -136,7 +136,7 @@ namespace Proyec_Agricola_Web.Models
             return carrito;
         }
 
-        // Crear carrito por sesión
+        // Crear carrito por sesiÃ³n
         private Carrito CrearCarritoPorSesion(string sesionID)
         {
             Carrito carrito = null;

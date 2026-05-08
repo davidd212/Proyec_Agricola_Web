@@ -110,7 +110,22 @@
 @section scripts {
 <script>
     function agregarAlCarrito(id, nombre) {
-        alert('✓ ' + nombre + ' agregado al carrito exitosamente');
+        $.ajax({
+            url: '@Url.Action("Agregar", "Carrito")',
+            type: 'POST',
+            data: { productoID: id, cantidad: 1 },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    $('#carrito-cantidad').text(response.cantidad);
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert('Error al agregar el producto al carrito');
+            }
+        });
     }
 </script>
 }

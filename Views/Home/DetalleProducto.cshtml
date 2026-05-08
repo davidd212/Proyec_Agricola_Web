@@ -1,4 +1,4 @@
-﻿﻿@model Proyec_Agricola_Web.Models.Producto
+﻿@model Proyec_Agricola_Web.Models.Producto
 @{
     ViewBag.Title = Model.Nombre + " - AgroVentas";
 }
@@ -49,7 +49,7 @@
         </div>
         </div>
 
-        <!-- Informaci�n del producto -->
+        <!-- Información del producto -->
          <div class="col-md-7">
              <span class="product-category mb-3">@Model.CategoriaNombre</span>
             
@@ -64,7 +64,7 @@
                 <i class="fas fa-star" style="color: var(--color-accent);"></i>
                 <i class="fas fa-star" style="color: var(--color-accent);"></i>
                 <i class="fas fa-star-half-alt" style="color: var(--color-accent);"></i>
-                <span class="ms-2 text-muted">(45 rese�as)</span>
+                <span class="ms-2 text-muted">(45 reseñas)</span>
             </div>
 
             <!-- Precio -->
@@ -75,9 +75,9 @@
                 </p>
             </div>
 
-            <!-- Descripci�n -->
+            <!-- Descripción -->
             <div class="mb-4">
-                <h5 style="color: var(--color-dark); font-weight: 600;">Descripci�n</h5>
+                <h5 style="color: var(--color-dark); font-weight: 600;">Descripción</h5>
                 <p>@Model.Descripcion</p>
             </div>
 
@@ -85,13 +85,13 @@
             <div class="mb-4">
                 <label class="form-label" style="color: var(--color-dark); font-weight: 600;">Cantidad</label>
                 <div class="input-group" style="width: 150px;">
-                    <button class="btn btn-outline-secondary" type="button">-</button>
-                    <input type="number" class="form-control text-center" value="1" min="1">
-                    <button class="btn btn-outline-secondary" type="button">+</button>
+                    <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(-1)">-</button>
+                    <input id="cantidadDetalle" type="number" class="form-control text-center" value="1" min="1" max="@Model.Stock">
+                    <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(1)">+</button>
                 </div>
             </div>
 
-            <!-- Botones de acci�n -->
+            <!-- Botones de acción -->
             <div class="d-grid gap-2">
                 <button class="btn btn-success btn-lg mb-2" onclick="agregarAlCarrito()">
                     <i class="fas fa-cart-plus"></i> Agregar al Carrito
@@ -101,26 +101,26 @@
                 </button>
             </div>
 
-            <!-- Informaci�n adicional -->
+            <!-- Información adicional -->
             <div class="mt-5 pt-4 border-top">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <h6 style="color: var(--color-dark); font-weight: 600;">
-                            <i class="fas fa-truck"></i> Env�o
+                            <i class="fas fa-truck"></i> Envío
                         </h6>
-                        <p class="text-muted">Env�o gratis a partir de 50�</p>
+                        <p class="text-muted">Envío gratis a partir de 50€</p>
                     </div>
                     <div class="col-md-6 mb-3">
                         <h6 style="color: var(--color-dark); font-weight: 600;">
-                            <i class="fas fa-shield-alt"></i> Garant�a
+                            <i class="fas fa-shield-alt"></i> Garantía
                         </h6>
-                        <p class="text-muted">Garant�a de satisfacci�n 100%</p>
+                        <p class="text-muted">Garantía de satisfacción 100%</p>
                     </div>
                     <div class="col-md-6 mb-3">
                         <h6 style="color: var(--color-dark); font-weight: 600;">
                             <i class="fas fa-undo"></i> Devoluciones
                         </h6>
-                        <p class="text-muted">Devuelve en 30 d�as sin preguntas</p>
+                        <p class="text-muted">Devuelve en 30 días sin preguntas</p>
                     </div>
                     <div class="col-md-6 mb-3">
                         <h6 style="color: var(--color-dark); font-weight: 600;">
@@ -147,7 +147,7 @@
                     <div class="product-info">
                         <span class="product-category">Semillas</span>
                         <h5 class="product-title">Semillas de Trigo</h5>
-                        <div class="product-price">12,00�</div>
+                        <div class="product-price">12,00€</div>
                         <button class="btn btn-success btn-sm w-100">Agregar</button>
                     </div>
                 </div>
@@ -155,12 +155,12 @@
             <div class="col-md-3">
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="/Content/Images/compost-organico.png" alt="Compost Org�nico" style="width: 100%; height: 100%; object-fit: contain; padding: 20px;" />
+                        <img src="/Content/Images/compost-organico.png" alt="Compost Orgánico" style="width: 100%; height: 100%; object-fit: contain; padding: 20px;" />
                     </div>
                     <div class="product-info">
                         <span class="product-category">Fertilizantes</span>
-                        <h5 class="product-title">Compost Org�nico</h5>
-                        <div class="product-price">20,00�</div>
+                        <h5 class="product-title">Compost Orgánico</h5>
+                        <div class="product-price">20,00€</div>
                         <button class="btn btn-success btn-sm w-100">Agregar</button>
                     </div>
                 </div>
@@ -173,7 +173,7 @@
                     <div class="product-info">
                         <span class="product-category">Pesticidas</span>
                         <h5 class="product-title">Herbicida Selectivo</h5>
-                        <div class="product-price">22,00�</div>
+                        <div class="product-price">22,00€</div>
                         <button class="btn btn-success btn-sm w-100">Agregar</button>
                     </div>
                 </div>
@@ -181,12 +181,12 @@
             <div class="col-md-3">
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="/Content/Images/semillas-maiz.png" alt="Semillas de Ma�z" style="width: 100%; height: 100%; object-fit: contain; padding: 20px;" />
+                        <img src="/Content/Images/semillas-maiz.png" alt="Semillas de Maíz" style="width: 100%; height: 100%; object-fit: contain; padding: 20px;" />
                     </div>
                     <div class="product-info">
                         <span class="product-category">Semillas</span>
-                        <h5 class="product-title">Semillas de Ma�z</h5>
-                        <div class="product-price">15,50�</div>
+                        <h5 class="product-title">Semillas de Maíz</h5>
+                        <div class="product-price">15,50€</div>
                         <button class="btn btn-success btn-sm w-100">Agregar</button>
                     </div>
                 </div>
@@ -197,8 +197,41 @@
 
 @section scripts {
     <script>
+        function cambiarCantidad(delta) {
+            var input = document.getElementById('cantidadDetalle');
+            var val = parseInt(input.value) + delta;
+            var max = parseInt(input.max);
+            if (val < 1) val = 1;
+            if (val > max) val = max;
+            input.value = val;
+        }
+
         function agregarAlCarrito() {
-            alert('? Producto agregado al carrito exitosamente');
+            var cantidad = parseInt(document.getElementById('cantidadDetalle').value);
+            if (cantidad <= 0) {
+                alert('La cantidad debe ser mayor a 0');
+                return;
+            }
+            $.ajax({
+                url: '@Url.Action("Agregar", "Carrito")',
+                type: 'POST',
+                data: {
+                    productoID: @Model.ProductoID,
+                    cantidad: cantidad
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#carrito-cantidad').text(response.cantidad);
+                        document.getElementById('cantidadDetalle').value = 1;
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert('Error al agregar el producto al carrito');
+                }
+            });
         }
     </script>
 }

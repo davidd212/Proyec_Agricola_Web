@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -73,7 +73,7 @@ namespace Proyec_Agricola_Web.Models
             return producto;
         }
 
-        // Obtener productos por categor�a
+        // Obtener productos por categoría
         public List<Producto> ObtenerProductosPorCategoria(int categoriaID)
         {
             List<Producto> productos = new List<Producto>();

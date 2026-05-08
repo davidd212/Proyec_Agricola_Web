@@ -1,4 +1,4 @@
-@model List<Proyec_Agricola_Web.Models.Producto>
+Ôªø@model List<Proyec_Agricola_Web.Models.Producto>
 
 @{
     ViewBag.Title = "Productos - AgroVentas";
@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2>Cat·logo de Productos</h2>
+            <h2>Cat√°logo de Productos</h2>
             @if (Session["TipoUsuario"] != null && Convert.ToInt32(Session["TipoUsuario"]) == 1)
             {
                 <a href="@Url.Action("Crear", "Producto")" class="btn btn-success btn-lg">
@@ -25,7 +25,7 @@
 
             @if (ViewBag.Categoria != null)
             {
-                <p>CategorÌa: <strong>@ViewBag.Categoria</strong></p>
+                <p>categor√≠a: <strong>@ViewBag.Categoria</strong></p>
             }
         </div>
     </div>
@@ -131,7 +131,7 @@ function AgregarAlCarrito(productoID) {
     var cantidad = parseInt($('#cantidad_' + productoID).val());
 
     if (cantidad <= 0) {
-        alert('Por favor ingresa una cantidad v·lida');
+        alert('Por favor ingresa una cantidad v√°lida');
         return;
     }
 
@@ -159,7 +159,7 @@ function AgregarAlCarrito(productoID) {
 }
 
 function EliminarProductoAdmin(productoID) {
-    if (confirm('øEst·s seguro de que deseas eliminar este producto?')) {
+    if (confirm('¬øEst√°s seguro de que deseas eliminar este producto?')) {
         $.ajax({
             url: '@Url.Action("Eliminar", "Producto")',
             type: 'POST',

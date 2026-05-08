@@ -1,126 +1,139 @@
-@model Proyec_Agricola_Web.Models.Carrito
+Ôªø@model Proyec_Agricola_Web.Models.Carrito
 
 @{
     ViewBag.Title = "Mi Carrito - AgroVentas";
 }
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-12">
-            <h2>
-                <i class="fas fa-shopping-cart"></i> Mi Carrito de Compras
-            </h2>
-            <hr />
-
-            @if (Model == null || Model.DetalleItems == null || Model.DetalleItems.Count == 0)
-            {
-                <div class="alert alert-info">
-                    <p>Tu carrito est· vacÌo.</p>
-                    <a href="@Url.Action("Index", "Producto")" class="btn btn-primary">
-                        <i class="fas fa-arrow-right"></i> Continuar Comprando
-                    </a>
-                </div>
-            }
-            else
-            {
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Producto</th>
-                                <th>Imagen</th>
-                                <th>Precio Unitario</th>
-                                <th>Cantidad</th>
-                                <th>Subtotal</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.DetalleItems)
-                            {
-                                <tr>
-                                    <td>
-                                        <strong>@item.NombreProducto</strong>
-                                    </td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.ImagenProducto))
-                                        {
-                                            <img src="@item.ImagenProducto" alt="@item.NombreProducto" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />
-                                        }
-                                        else
-                                        {
-                                            <i class="fas fa-image text-muted"></i>
-                                        }
-                                    </td>
-                                    <td>
-                                        $@item.PrecioUnitario.ToString("F2")
-                                    </td>
-                                    <td>
-                                        <input type="number" min="1" value="@item.Cantidad" class="form-control" style="width: 80px;" 
-                                               onchange="ActualizarCantidad(@item.ProductoID, this.value)" />
-                                    </td>
-                                    <td>
-                                        <span class="text-success font-weight-bold">$<span class="item-subtotal">@item.PrecioTotal.ToString("F2")</span></span>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-danger btn-sm" onclick="EliminarProducto(@item.ProductoID)" title="Eliminar producto">
-                                            <i class="fa fa-trash"></i> Eliminar
-                                        </button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="row mt-4">
-                    <div class="col-md-8">
-                        <a href="@Url.Action("Index", "Producto")" class="btn btn-outline-primary">
-                            <i class="fa fa-arrow-left"></i> Continuar Comprando
-                        </a>
-                        <button class="btn btn-outline-danger" onclick="VaciarCarrito()">
-                            <i class="fa fa-trash"></i> Vaciar Carrito
-                        </button>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card border-success">
-                            <div class="card-header bg-success text-white">
-                                <h5 class="mb-0">Resumen de Compra</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between mb-2">
-                                    <strong>ArtÌculos:</strong>
-                                    <span id="cantidad-items">@Model.DetalleItems.Count</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <strong>Subtotal:</strong>
-                                    <span>$<span id="subtotal">@Model.DetalleItems.Sum(x => x.PrecioTotal).ToString("F2")</span></span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <strong>EnvÌo:</strong>
-                                    <span>$<span id="envio">0.00</span></span>
-                                </div>
-                                <hr />
-                                <div class="d-flex justify-content-between">
-                                    <h6 class="mb-0"><strong>Total:</strong></h6>
-                                    <h6 class="mb-0 text-success"><strong>$<span id="total">@Model.DetalleItems.Sum(x => x.PrecioTotal).ToString("F2")</span></strong></h6>
-                                </div>
-                                <button class="btn btn-success btn-block btn-lg mt-3 w-100" onclick="ProcesarPago()">
-                                    <i class="fas fa-credit-card"></i> Proceder al Pago
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item active">Carrito de Compras</li>
+            </ol>
+        </nav>
     </div>
 </div>
 
+<div class="container my-5">
+    <h1 style="color: var(--color-dark); font-weight: 700; margin-bottom: 30px;">
+        <i class="fas fa-shopping-cart" style="color: var(--color-primary);"></i> Carrito de Compras
+    </h1>
+
+    @if (Model == null || Model.DetalleItems == null || Model.DetalleItems.Count == 0)
+    {
+        <div class="alert alert-info" role="alert" style="text-align: center; padding: 60px 20px; border-radius: 12px;">
+            <i class="fas fa-shopping-bag" style="font-size: 48px; color: var(--color-primary); margin-bottom: 20px;"></i>
+            <h4 style="font-weight: 600; color: var(--color-dark); margin-bottom: 10px;">Tu carrito est√° vac√≠o</h4>
+            <p class="text-muted mb-4">¬°Empieza a explorar nuestros productos agr√≠colas!</p>
+            <a href="@Url.Action("Productos", "Home")" class="btn btn-success btn-lg" style="border-radius: 25px; padding: 12px 30px;">
+                <i class="fas fa-store"></i> Ir al Cat√°logo
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-8">
+                @foreach (var item in Model.DetalleItems)
+                {
+                    <div class="cart-item" id="item-@item.ProductoID">
+                        <div class="cart-image">
+                            @if (!string.IsNullOrEmpty(item.ImagenProducto))
+                            {
+                                <img src="@item.ImagenProducto" alt="@item.NombreProducto" style="width: 100%; height: 100%; object-fit: contain; padding: 10px; border-radius: 8px;" />
+                            }
+                            else
+                            {
+                                <i class="fas fa-seedling" style="font-size: 48px; color: var(--color-primary); opacity: 0.3;"></i>
+                            }
+                        </div>
+                        <div class="cart-details">
+                            <h5 style="font-weight: 600; color: var(--color-dark); margin-bottom: 5px;">@item.NombreProducto</h5>
+                            <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 10px;">
+                                Precio unitario: <strong>$@item.PrecioUnitario.ToString("F2")</strong>
+                            </p>
+                            <div class="d-flex gap-3 align-items-center">
+                                <div class="input-group" style="width: 150px;">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(@item.ProductoID, -1)">-</button>
+                                    <input type="number" id="cantidad-@item.ProductoID" class="form-control text-center" value="@item.Cantidad" min="1" style="border-radius: 0;" />
+                                    <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(@item.ProductoID, 1)">+</button>
+                                </div>
+                                <button class="btn btn-sm" style="color: #e74c3c; background: none; border: 1px solid #e74c3c; border-radius: 20px; padding: 6px 16px;" onclick="EliminarProducto(@item.ProductoID)">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <div class="cart-price">$@item.PrecioTotal.ToString("F2")</div>
+                            <small class="text-muted">@item.Cantidad x $@item.PrecioUnitario.ToString("F2")</small>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-4">
+                <div class="cart-summary">
+                    <h4 style="color: var(--color-dark); font-weight: 700; margin-bottom: 20px;">
+                        <i class="fas fa-receipt" style="color: var(--color-primary);"></i> Resumen del Pedido
+                    </h4>
+
+                    <div class="cart-summary-row">
+                        <span>Art√≠culos:</span>
+                        <span id="cantidad-items">@Model.DetalleItems.Count</span>
+                    </div>
+
+                    <div class="cart-summary-row">
+                        <span>Subtotal:</span>
+                        <span>$<span id="subtotal">@Model.DetalleItems.Sum(x => x.PrecioTotal).ToString("F2")</span></span>
+                    </div>
+
+                    <div class="cart-summary-row">
+                        <span>Env√≠o:</span>
+                        <span style="color: var(--color-primary); font-weight: 600;">Gratis</span>
+                    </div>
+
+                    <div class="cart-summary-row total">
+                        <span>Total:</span>
+                        <span>$<span id="total">@Model.DetalleItems.Sum(x => x.PrecioTotal).ToString("F2")</span></span>
+                    </div>
+
+                    <button class="btn btn-success btn-lg w-100 mb-2" onclick="ProcesarPago()" style="border-radius: 25px; padding: 12px;">
+                        <i class="fas fa-credit-card"></i> Proceder al Pago
+                    </button>
+                    <a href="@Url.Action("Productos", "Home")" class="btn btn-outline-secondary w-100" style="border-radius: 25px; padding: 12px;">
+                        <i class="fas fa-arrow-left"></i> Continuar Comprando
+                    </a>
+                </div>
+
+                <div class="mt-4 p-4 bg-light rounded" style="border-radius: 12px;">
+                    <h6 style="color: var(--color-dark); font-weight: 600; margin-bottom: 15px;">
+                        <i class="fas fa-check-circle" style="color: var(--color-primary);"></i> ¬øPor qu√© elegirnos?
+                    </h6>
+                    <ul class="list-unstyled text-muted" style="font-size: 0.9rem;">
+                        <li style="margin-bottom: 10px;"><i class="fas fa-truck" style="color: var(--color-primary); margin-right: 8px;"></i>Env√≠o r√°pido 24-48h</li>
+                        <li style="margin-bottom: 10px;"><i class="fas fa-shield-alt" style="color: var(--color-primary); margin-right: 8px;"></i>Pago 100% seguro</li>
+                        <li style="margin-bottom: 10px;"><i class="fas fa-undo" style="color: var(--color-primary); margin-right: 8px;"></i>Devoluciones en 30 d√≠as</li>
+                        <li><i class="fas fa-headset" style="color: var(--color-primary); margin-right: 8px;"></i>Soporte dedicado</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
 <script type="text/javascript">
+function cambiarCantidad(productoID, delta) {
+    var input = document.getElementById('cantidad-' + productoID);
+    var val = parseInt(input.value) + delta;
+    if (val < 1) val = 1;
+    input.value = val;
+    ActualizarCantidad(productoID, val);
+}
+
 function ActualizarCantidad(productoID, cantidad) {
     var cantidadInt = parseInt(cantidad);
-    
+
     if (cantidadInt <= 0) {
         alert('La cantidad debe ser mayor a 0');
         location.reload();
@@ -130,10 +143,7 @@ function ActualizarCantidad(productoID, cantidad) {
     $.ajax({
         url: '@Url.Action("ActualizarCantidad", "Carrito")',
         type: 'POST',
-        data: {
-            productoID: productoID,
-            cantidad: cantidadInt
-        },
+        data: { productoID: productoID, cantidad: cantidadInt },
         success: function (response) {
             if (response.success) {
                 location.reload();
@@ -149,7 +159,7 @@ function ActualizarCantidad(productoID, cantidad) {
 }
 
 function EliminarProducto(productoID) {
-    if (confirm('øEst·s seguro de que deseas eliminar este producto del carrito?')) {
+    if (confirm('¬øEst√°s seguro de que deseas eliminar este producto del carrito?')) {
         $.ajax({
             url: '@Url.Action("Eliminar", "Carrito")',
             type: 'POST',
@@ -169,7 +179,7 @@ function EliminarProducto(productoID) {
 }
 
 function VaciarCarrito() {
-    if (confirm('øEst·s seguro de que deseas vaciar el carrito completamente?')) {
+    if (confirm('¬øEst√°s seguro de que deseas vaciar el carrito completamente?')) {
         $.ajax({
             url: '@Url.Action("Vaciar", "Carrito")',
             type: 'POST',
@@ -189,6 +199,5 @@ function VaciarCarrito() {
 
 function ProcesarPago() {
     alert('Funcionalidad de pago en desarrollo');
-    // AquÌ ir· el cÛdigo para procesar el pago
 }
 </script>

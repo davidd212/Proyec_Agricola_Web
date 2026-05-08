@@ -1,4 +1,4 @@
-using Proyec_Agricola_Web.Models;
+ï»¿using Proyec_Agricola_Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -23,7 +23,7 @@ namespace Proyec_Agricola_Web.Controllers
         {
             try
             {
-                // Validar que el usuario sea CLIENTE (TipoUsuario = 2) o no esté logueado
+                // Validar que el usuario sea CLIENTE (TipoUsuario = 2) o no estÃ¡ logueado
                 if (Session["TipoUsuario"] != null && Convert.ToInt32(Session["TipoUsuario"]) == 1)
                 {
                     return Json(new { success = false, message = "Los administradores no pueden usar el carrito." });
@@ -39,7 +39,7 @@ namespace Proyec_Agricola_Web.Controllers
                 Producto producto = productoDAL.ObtenerProductoPorId(productoID);
                 if (producto == null || !producto.ActivoCarrito || producto.Stock <= 0)
                 {
-                    return Json(new { success = false, message = "El producto no está disponible." });
+                    return Json(new { success = false, message = "El producto no estÃ¡ disponible." });
                 }
 
                 // Validar stock
@@ -216,12 +216,12 @@ namespace Proyec_Agricola_Web.Controllers
             }
         }
 
-        // MÉTODOS PRIVADOS
+        // MÃ‰TODOS PRIVADOS
         private Carrito ObtenerCarritoActual()
         {
             Carrito carrito = null;
 
-            // Si el usuario está logueado
+            // Si el usuario estÃ¡ logueado
             if (Session["UsuarioID"] != null)
             {
                 int usuarioID = Convert.ToInt32(Session["UsuarioID"]);
@@ -229,7 +229,7 @@ namespace Proyec_Agricola_Web.Controllers
             }
             else
             {
-                // Para usuarios no registrados, usar sesión
+                // Para usuarios no registrados, usar sesiÃ³n
                 string sesionID = Session.SessionID;
                 carrito = carritoDAL.ObtenerCarritoPorSesion(sesionID);
             }
