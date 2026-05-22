@@ -1,0 +1,93 @@
+@model List<Proyec_Agricola_Web.Models.Pedido>
+
+@{
+    ViewBag.Title = "Mis Pedidos - AgroVentas";
+}
+
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item active">Mis Pedidos</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    <h1 style="color: var(--color-dark); font-weight: 700; margin-bottom: 30px;">
+        <i class="fas fa-box" style="color: var(--color-primary);"></i> Mis Pedidos
+    </h1>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-info">@TempData["Mensaje"]</div>
+    }
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="alert alert-info" role="alert" style="text-align: center; padding: 60px 20px; border-radius: 12px;">
+            <i class="fas fa-box-open" style="font-size: 48px; color: var(--color-primary); margin-bottom: 20px;"></i>
+            <h4 style="font-weight: 600; color: var(--color-dark); margin-bottom: 10px;">No tienes pedidos aún</h4>
+            <p class="text-muted mb-4">¡Realiza tu primera compra!</p>
+            <a href="@Url.Action("Productos", "Home")" class="btn btn-success btn-lg" style="border-radius: 25px; padding: 12px 30px;">
+                <i class="fas fa-store"></i> Ver Productos
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table" style="border-radius: 12px; overflow: hidden; box-shadow: 0 2px 15px rgba(0,0,0,0.08);">
+                <thead style="background: var(--color-primary); color: white;">
+                    <tr>
+                        <th style="padding: 15px;">Pedido</th>
+                        <th style="padding: 15px;">Fecha</th>
+                        <th style="padding: 15px;">Total</th>
+                        <th style="padding: 15px;">Estado</th>
+                        <th style="padding: 15px;">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var pedido in Model)
+                    {
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 15px; font-weight: 600;">#@pedido.PedidoID</td>
+                            <td style="padding: 15px; color: #666;">@pedido.FechaPedido.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td style="padding: 15px; font-weight: 600; color: var(--color-dark);">$@pedido.Total.ToString("F2")</td>
+                            <td style="padding: 15px;">
+                                @switch (pedido.Estado)
+                                {
+                                    case "Pendiente":
+                                        <span class="badge bg-warning text-dark">Pendiente</span>
+                                        break;
+                                    case "Procesando":
+                                        <span class="badge bg-info text-white">Procesando</span>
+                                        break;
+                                    case "Enviado":
+                                        <span class="badge bg-primary">Enviado</span>
+                                        break;
+                                    case "Entregado":
+                                        <span class="badge bg-success">Entregado</span>
+                                        break;
+                                    case "Cancelado":
+                                        <span class="badge bg-danger">Cancelado</span>
+                                        break;
+                                    default:
+                                        <span class="badge bg-secondary">@pedido.Estado</span>
+                                        break;
+                                }
+                            </td>
+                            <td style="padding: 15px;">
+                                <a href="@Url.Action("Detalle", "Pedido", new { id = pedido.PedidoID })" class="btn btn-sm btn-outline-success" style="border-radius: 20px;">
+                                    <i class="fas fa-eye"></i> Ver detalle
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

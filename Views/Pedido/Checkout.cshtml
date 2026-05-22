@@ -1,0 +1,175 @@
+@model Proyec_Agricola_Web.Models.Carrito
+
+@{
+    ViewBag.Title = "Checkout - AgroVentas";
+    decimal subtotal = ViewBag.Subtotal ?? 0;
+    decimal costoEnvio = ViewBag.CostoEnvio ?? 0;
+    decimal impuesto = ViewBag.Impuesto ?? 0;
+    decimal total = ViewBag.Total ?? 0;
+}
+
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Carrito")">Carrito</a></li>
+                <li class="breadcrumb-item active">Checkout</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    <h1 style="color: var(--color-dark); font-weight: 700; margin-bottom: 30px;">
+        <i class="fas fa-credit-card" style="color: var(--color-primary);"></i> Confirmar Pedido
+    </h1>
+
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card p-4" style="border-radius: 12px; border: none; box-shadow: 0 2px 15px rgba(0,0,0,0.08);">
+                <h4 style="font-weight: 600; margin-bottom: 20px;">
+                    <i class="fas fa-truck"></i> Dirección de Envío
+                </h4>
+
+                <form id="form-checkout">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label class="form-label fw500">Nombre completo</label>
+                        <input type="text" class="form-control" id="nombreCliente" value="@(Session["Nombre"] ?? "")" readonly style="background: #f8f9fa;" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw500">Dirección *</label>
+                        <input type="text" class="form-control" id="direccion" placeholder="Calle, número, colonia" required />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw500">Ciudad *</label>
+                            <input type="text" class="form-control" id="ciudad" placeholder="Ciudad" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw500">Código Postal</label>
+                            <input type="text" class="form-control" id="codigoPostal" placeholder="C.P." />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw500">Teléfono de contacto</label>
+                        <input type="tel" class="form-control" id="telefono" placeholder="+52 687 145 0804" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw500">Notas del pedido</label>
+                        <textarea class="form-control" id="notas" rows="3" placeholder="¿Alguna indicación especial?"></textarea>
+                    </div>
+
+                    <div class="d-flex gap-3 mt-4">
+                        <button type="submit" class="btn btn-success btn-lg" style="border-radius: 25px; padding: 12px 30px; flex: 1;" id="btnConfirmar">
+                            <i class="fas fa-check-circle"></i> Confirmar Pedido
+                        </button>
+                        <a href="@Url.Action("Index", "Carrito")" class="btn btn-outline-secondary btn-lg" style="border-radius: 25px; padding: 12px 30px;">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card p-4" style="border-radius: 12px; border: none; box-shadow: 0 2px 15px rgba(0,0,0,0.08);">
+                <h4 style="font-weight: 600; margin-bottom: 20px;">
+                    <i class="fas fa-receipt"></i> Resumen del Pedido
+                </h4>
+
+                @foreach (var item in Model.DetalleItems)
+                {
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #eee;">
+                        <div style="width: 50px; height: 50px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                            @if (!string.IsNullOrEmpty(item.ImagenProducto))
+                            {
+                                <img src="@item.ImagenProducto" alt="@item.NombreProducto" style="width: 100%; height: 100%; object-fit: contain;" />
+                            }
+                            else
+                            {
+                                <i class="fas fa-seedling" style="color: var(--color-primary);"></i>
+                            }
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500; color: var(--color-dark);">@item.NombreProducto</div>
+                            <div style="font-size: 0.85rem; color: #666;">@item.Cantidad x $@item.PrecioUnitario.ToString("F2")</div>
+                        </div>
+                        <div style="font-weight: 600; color: var(--color-dark);">$@item.PrecioTotal.ToString("F2")</div>
+                    </div>
+                }
+
+                <div style="margin-top: 20px;">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span style="color: #666;">Subtotal</span>
+                        <span style="font-weight: 500;">$@subtotal.ToString("F2")</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span style="color: #666;">Envío</span>
+                        <span style="color: var(--color-primary); font-weight: 600;">Gratis</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span style="color: #666;">IVA (16%)</span>
+                        <span style="font-weight: 500;">$@impuesto.ToString("F2")</span>
+                    </div>
+                    <hr />
+                    <div class="d-flex justify-content-between">
+                        <span style="font-size: 1.2rem; font-weight: 700; color: var(--color-dark);">Total</span>
+                        <span style="font-size: 1.2rem; font-weight: 700; color: var(--color-primary);">$@total.ToString("F2")</span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $('#form-checkout').submit(function (e) {
+            e.preventDefault();
+
+            var direccion = $('#direccion').val().trim();
+            var ciudad = $('#ciudad').val().trim();
+
+            if (!direccion || !ciudad) {
+                alert('Completa la dirección y ciudad.');
+                return;
+            }
+
+            $('#btnConfirmar').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Procesando...');
+
+            $.ajax({
+                url: '@Url.Action("ConfirmarPedido", "Pedido")',
+                type: 'POST',
+                data: {
+                    direccion: direccion,
+                    ciudad: ciudad,
+                    codigoPostal: $('#codigoPostal').val(),
+                    telefono: $('#telefono').val(),
+                    notas: $('#notas').val(),
+                    __RequestVerificationToken: $('[name=__RequestVerificationToken]').val()
+                },
+                success: function (response) {
+                    if (response.success) {
+                        window.location.href = '@Url.Action("Confirmacion", "Pedido")/' + response.pedidoID;
+                    } else {
+                        alert(response.message);
+                        $('#btnConfirmar').prop('disabled', false).html('<i class="fas fa-check-circle"></i> Confirmar Pedido');
+                    }
+                },
+                error: function () {
+                    alert('Error al procesar el pedido.');
+                    $('#btnConfirmar').prop('disabled', false).html('<i class="fas fa-check-circle"></i> Confirmar Pedido');
+                }
+            });
+        });
+    </script>
+}

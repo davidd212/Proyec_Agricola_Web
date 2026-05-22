@@ -38,6 +38,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Historial", "Pedido")" style="color: white; transition: all 0.3s;">
+                            <i class="fas fa-box" style="margin-right: 5px;"></i> Mis Pedidos
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="@Url.Action("Index", "Carrito")" style="color: white; transition: all 0.3s;">
                             <i class="fas fa-shopping-cart" style="margin-right: 5px;"></i> Carrito <span id="carrito-cantidad" class="badge bg-warning text-dark">@(Session["CarritoCantidad"] ?? 0)</span>
                         </a>

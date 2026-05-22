@@ -1,0 +1,81 @@
+@model Proyec_Agricola_Web.Models.Pedido
+
+@{
+    ViewBag.Title = "Pedido Confirmado - AgroVentas";
+}
+
+<div class="container my-5">
+    <div style="text-align: center; padding: 60px 20px;">
+        <div style="width: 100px; height: 100px; background: #e8f5e9; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+            <i class="fas fa-check-circle" style="font-size: 50px; color: #2e7d32;"></i>
+        </div>
+
+        <h1 style="font-weight: 700; color: var(--color-dark); margin-bottom: 10px;">¡Pedido Confirmado!</h1>
+        <p style="font-size: 1.1rem; color: #666; margin-bottom: 30px;">
+            Gracias por tu compra, <strong>@Model.NombreCliente</strong>. Tu pedido ha sido registrado exitosamente.
+        </p>
+
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-6">
+                <div style="background: #f8f9fa; border-radius: 12px; padding: 25px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #dee2e6;">
+                        <span style="color: #666;">Número de pedido</span>
+                        <span style="font-weight: 700; color: var(--color-dark);">#@Model.PedidoID</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #dee2e6;">
+                        <span style="color: #666;">Fecha</span>
+                        <span style="font-weight: 500; color: var(--color-dark);">@Model.FechaPedido.ToString("dd/MM/yyyy HH:mm")</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #dee2e6;">
+                        <span style="color: #666;">Estado</span>
+                        <span class="badge bg-warning text-dark" style="font-size: 0.9rem; padding: 6px 16px;">@Model.Estado</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #dee2e6;">
+                        <span style="color: #666;">Total pagado</span>
+                        <span style="font-size: 1.2rem; font-weight: 700; color: var(--color-primary);">$@Model.Total.ToString("F2")</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #666;">Dirección de envío</span>
+                        <span style="font-weight: 500; color: var(--color-dark); text-align: right; max-width: 250px;">@Model.DireccionEnvio, @Model.CiudadEnvio</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 style="font-weight: 600; margin-bottom: 20px;">Productos</h4>
+
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+                @foreach (var item in Model.DetalleItems)
+                {
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #eee;">
+                        <div style="width: 50px; height: 50px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                            @if (!string.IsNullOrEmpty(item.ImagenProducto))
+                            {
+                                <img src="@item.ImagenProducto" alt="@item.NombreProducto" style="width: 100%; height: 100%; object-fit: contain;" />
+                            }
+                            else
+                            {
+                                <i class="fas fa-seedling" style="color: var(--color-primary);"></i>
+                            }
+                        </div>
+                        <div style="flex: 1; text-align: left;">
+                            <div style="font-weight: 500; color: var(--color-dark);">@item.NombreProducto</div>
+                            <div style="font-size: 0.85rem; color: #666;">@item.Cantidad x $@item.PrecioUnitario.ToString("F2")</div>
+                        </div>
+                        <div style="font-weight: 600; color: var(--color-dark);">$@item.PrecioTotal.ToString("F2")</div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <a href="@Url.Action("Historial", "Pedido")" class="btn btn-success btn-lg" style="border-radius: 25px; padding: 12px 30px; margin-right: 10px;">
+                <i class="fas fa-list"></i> Ver Mis Pedidos
+            </a>
+            <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary btn-lg" style="border-radius: 25px; padding: 12px 30px;">
+                <i class="fas fa-home"></i> Volver al Inicio
+            </a>
+        </div>
+    </div>
+</div>
