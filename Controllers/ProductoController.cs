@@ -13,7 +13,7 @@ namespace Proyec_Agricola_Web.Controllers
         private ProductoDAL productDAL = new ProductoDAL();
         private CategoriaDAL categoriaDAL = new CategoriaDAL();
 
-        // Extensiones de imagen permitidas
+       
         private static readonly string[] ExtensionesPermitidas = { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
 
         // GET: Producto - Listar todos los productos
