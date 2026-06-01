@@ -51,14 +51,14 @@
                             <input type="text" class="form-control" id="ciudad" placeholder="Ciudad" required />
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw500">Código Postal</label>
-                            <input type="text" class="form-control" id="codigoPostal" placeholder="C.P." />
+                            <label class="form-label fw500">Código Postal *</label>
+                            <input type="text" class="form-control" id="codigoPostal" placeholder="C.P." required />
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw500">Teléfono de contacto</label>
-                        <input type="tel" class="form-control" id="telefono" placeholder="+52 687 145 0804" />
+                        <label class="form-label fw500">Teléfono de contacto *</label>
+                        <input type="tel" class="form-control" id="telefono" placeholder="+52 687 145 0804" required />
                     </div>
 
                     <div class="mb-3">
@@ -138,9 +138,26 @@
 
             var direccion = $('#direccion').val().trim();
             var ciudad = $('#ciudad').val().trim();
+            var codigoPostal = $('#codigoPostal').val().trim();
+            var telefono = $('#telefono').val().trim();
 
-            if (!direccion || !ciudad) {
-                alert('Completa la dirección y ciudad.');
+            if (!direccion) {
+                alert('Por favor, completa el campo Dirección.');
+                return;
+            }
+
+            if (!ciudad) {
+                alert('Por favor, completa el campo Ciudad.');
+                return;
+            }
+
+            if (!codigoPostal) {
+                alert('Por favor, completa el campo Código Postal.');
+                return;
+            }
+
+            if (!telefono) {
+                alert('Por favor, completa el campo Teléfono de contacto.');
                 return;
             }
 
@@ -152,9 +169,9 @@
                 data: {
                     direccion: direccion,
                     ciudad: ciudad,
-                    codigoPostal: $('#codigoPostal').val(),
-                    telefono: $('#telefono').val(),
-                    notas: $('#notas').val(),
+                    codigoPostal: codigoPostal,
+                    telefono: telefono,
+                    notas: $('#notas').val().trim(),
                     __RequestVerificationToken: $('[name=__RequestVerificationToken]').val()
                 },
                 success: function (response) {

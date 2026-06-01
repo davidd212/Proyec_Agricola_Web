@@ -409,3 +409,46 @@ select,
 textarea {
     max-width: 100%;
 }
+
+/* ===== Estilos para Productos Relacionados ===== */
+.col-xl-2-4 {
+    flex: 0 0 calc(20% - 0.75rem);
+}
+
+@media (max-width: 1399px) {
+    .col-xl-2-4 {
+        flex: 0 0 calc(25% - 0.75rem);
+    }
+}
+
+@media (max-width: 1199px) {
+    .col-xl-2-4 {
+        flex: 0 0 calc(25% - 0.75rem);
+    }
+}
+
+@media (max-width: 991px) {
+    .col-xl-2-4 {
+        flex: 0 0 calc(33.33% - 0.75rem);
+    }
+}
+
+@media (max-width: 767px) {
+    .col-xl-2-4 {
+        flex: 0 0 calc(50% - 0.75rem);
+    }
+}
+
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
+    transform: translateY(-4px);
+}
+

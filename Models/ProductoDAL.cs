@@ -171,6 +171,43 @@ namespace Proyec_Agricola_Web.Models
             return productos;
         }
 
+        // Obtener productos relacionados (misma categoría + destacados si es necesario)
+        public List<Producto> ObtenerProductosRelacionados(int productoID, int categoriaID, int cantidad = 8)
+        {
+            List<Producto> productos = new List<Producto>();
+
+            using (SqlConnection con = new SqlConnection(conexion))
+            {
+                string query = @"SELECT TOP " + cantidad + @" p.ProductoID, p.CategoriaID, p.Nombre, p.Descripcion, p.DescripcionCorta,
+                                       p.Precio, p.PrecioDescuento, p.Stock, p.Imagen, p.ImagenRuta, p.CodigoProducto,
+                                       p.Peso, p.Activo, p.ActivoCarrito, p.Destacado, p.Visitas, p.Calificacion,
+                                       p.FechaCreacion, p.FechaActualizacion, c.Nombre as CategoriaNombre
+                                FROM Productos p
+                                LEFT JOIN Categorias c ON p.CategoriaID = c.CategoriaID
+                                WHERE p.ProductoID != @ProductoID AND p.Activo = 1 AND c.Activa = 1
+                                ORDER BY 
+                                    CASE WHEN p.CategoriaID = @CategoriaID THEN 0 ELSE 1 END,
+                                    p.Destacado DESC,
+                                    p.Nombre";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@ProductoID", productoID);
+                cmd.Parameters.AddWithValue("@CategoriaID", categoriaID);
+
+                con.Open();
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        productos.Add(MapearProducto(dr));
+                    }
+                }
+            }
+
+            return productos;
+        }
+
         // Crear nuevo producto (SOLO ADMINISTRADOR)
         public bool CrearProducto(Producto producto)
         {

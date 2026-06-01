@@ -52,6 +52,16 @@ namespace Proyec_Agricola_Web.Controllers
             Producto producto = productDAL.ObtenerProductoPorId(id);
             if (producto == null)
                 return HttpNotFound();
+
+            // Cargar productos relacionados inteligentemente
+            // Prioriza: 1) Misma categoría, 2) Productos destacados, 3) Otros productos
+            List<Producto> productosRelacionados = productDAL.ObtenerProductosRelacionados(
+                id, 
+                producto.CategoriaID, 
+                8
+            );
+
+            ViewBag.ProductosRelacionados = productosRelacionados;
             return View(producto);
         }
 

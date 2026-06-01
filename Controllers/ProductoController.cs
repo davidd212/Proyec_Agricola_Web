@@ -159,63 +159,108 @@ namespace Proyec_Agricola_Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Editar(int id, Producto modelo, HttpPostedFileBase imagenFile)
         {
-            if (Session["TipoUsuario"] == null || Convert.ToInt32(Session["TipoUsuario"]) != 1)
+            try
             {
-                TempData["Mensaje"] = "No tienes permiso para editar productos. Solo administradores.";
-                return RedirectToAction("Index");
-            }
-
-            // Procesar nueva imagen si se subió una
-            if (imagenFile != null && imagenFile.ContentLength > 0)
-            {
-                string resultado = GuardarImagen(imagenFile);
-                if (resultado != null)
+                if (Session["TipoUsuario"] == null || Convert.ToInt32(Session["TipoUsuario"]) != 1)
                 {
-                    modelo.Imagen = Path.GetFileName(resultado);
-                    modelo.ImagenRuta = resultado;
+                    TempData["Mensaje"] = "No tienes permiso para editar productos. Solo administradores.";
+                    return RedirectToAction("Index");
+                }
+
+                // Obtener el producto actual de la BD para mantener valores que no se envían desde el formulario
+                Producto productoActual = productDAL.ObtenerProductoPorId(id);
+                if (productoActual == null)
+                {
+                    TempData["Mensaje"] = "El producto no existe.";
+                    return RedirectToAction("Index");
+                }
+
+                // Procesar nueva imagen si se subió una
+                if (imagenFile != null && imagenFile.ContentLength > 0)
+                {
+                    try
+                    {
+                        string resultado = GuardarImagen(imagenFile);
+                        if (resultado != null)
+                        {
+                            modelo.Imagen = Path.GetFileName(resultado);
+                            modelo.ImagenRuta = resultado;
+                        }
+                        else
+                        {
+                            ViewBag.Mensaje = "El archivo de imagen no es válido. Use JPG, PNG, GIF o WEBP (máx. 5MB).";
+                            ViewBag.Categorias = categoriaDAL.ObtenerTodasCategorias();
+                            return View(modelo);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("❌ Error al guardar imagen: " + ex.Message);
+                        System.Diagnostics.Debug.WriteLine("📍 Stack: " + ex.StackTrace);
+                        ViewBag.Mensaje = "Error al procesar la imagen. Por favor, intenta nuevamente.";
+                        ViewBag.Categorias = categoriaDAL.ObtenerTodasCategorias();
+                        return View(modelo);
+                    }
+                }
+                // Si no se subió nueva imagen, mantener la existente
+                else
+                {
+                    modelo.Imagen = productoActual.Imagen;
+                    modelo.ImagenRuta = productoActual.ImagenRuta;
+                }
+
+                // Copiar propiedades que no vienen del formulario
+                modelo.ProductoID = id;
+                modelo.FechaCreacion = productoActual.FechaCreacion;
+                modelo.FechaActualizacion = DateTime.Now;
+                modelo.Visitas = productoActual.Visitas;
+                modelo.Calificacion = productoActual.Calificacion;
+                modelo.Activo = productoActual.Activo;
+                modelo.ActivoCarrito = productoActual.ActivoCarrito;
+
+                // Validar que la categoría exista
+                if (!categoriaDAL.CategoriaExiste(modelo.CategoriaID))
+                {
+                    ViewBag.Mensaje = "La categoría seleccionada no es válida.";
+                    ViewBag.Categorias = categoriaDAL.ObtenerTodasCategorias();
+                    return View(modelo);
+                }
+
+                // Limpiar errores de modelo relacionados con propiedades no enviadas desde el formulario
+                ModelState.Remove("FechaCreacion");
+                ModelState.Remove("FechaActualizacion");
+                ModelState.Remove("Visitas");
+                ModelState.Remove("Calificacion");
+                ModelState.Remove("Activo");
+                ModelState.Remove("ActivoCarrito");
+                ModelState.Remove("CategoriaNombre");
+
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors);
+                    string errorMsg = string.Join("; ", errors.Select(e => e.ErrorMessage));
+                    ViewBag.Mensaje = "Validación fallida: " + errorMsg;
+                    ViewBag.Categorias = categoriaDAL.ObtenerTodasCategorias();
+                    return View(modelo);
+                }
+
+                if (productDAL.ActualizarProducto(modelo))
+                {
+                    TempData["Mensaje"] = "✅ Producto actualizado exitosamente.";
+                    return RedirectToAction("Detalle", new { id });
                 }
                 else
                 {
-                    ViewBag.Mensaje = "El archivo de imagen no es válido. Use JPG, PNG, GIF o WEBP (máx. 5MB).";
+                    ViewBag.Mensaje = "Error al actualizar el producto. Intenta nuevamente.";
+                    ViewBag.Categorias = categoriaDAL.ObtenerTodasCategorias();
                     return View(modelo);
                 }
             }
-            // Si no se subió nueva imagen, mantener la existente
-            else if (string.IsNullOrEmpty(modelo.ImagenRuta))
+            catch (Exception ex)
             {
-                Producto actual = productDAL.ObtenerProductoPorId(id);
-                if (actual != null)
-                {
-                    modelo.Imagen = actual.Imagen;
-                    modelo.ImagenRuta = actual.ImagenRuta;
-                }
-            }
-
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Mensaje = "Completa todos los campos correctamente.";
-                ViewBag.Categorias = categoriaDAL.ObtenerTodasCategorias();
-                return View(modelo);
-            }
-
-            // Validar que la categoría exista
-            if (!categoriaDAL.CategoriaExiste(modelo.CategoriaID))
-            {
-                ViewBag.Mensaje = "La categoría seleccionada no es válida.";
-                ViewBag.Categorias = categoriaDAL.ObtenerTodasCategorias();
-                return View(modelo);
-            }
-
-            modelo.ProductoID = id;
-
-            if (productDAL.ActualizarProducto(modelo))
-            {
-                TempData["Mensaje"] = "✅ Producto actualizado exitosamente.";
-                return RedirectToAction("Detalle", new { id });
-            }
-            else
-            {
-                ViewBag.Mensaje = "Error al actualizar el producto. Intenta nuevamente.";
+                System.Diagnostics.Debug.WriteLine("❌ Error crítico en Editar: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine("📍 Stack: " + ex.StackTrace);
+                ViewBag.Mensaje = "Error crítico al editar el producto. Por favor, intenta nuevamente.";
                 ViewBag.Categorias = categoriaDAL.ObtenerTodasCategorias();
                 return View(modelo);
             }

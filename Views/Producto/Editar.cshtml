@@ -157,7 +157,8 @@
         <div class="form-section">
           <h5 class="section-title"><i class="fas fa-cog me-2"></i>Opciones</h5>
           <div class="form-check form-switch">
-            @Html.CheckBoxFor(m => m.Destacado, new { @class = "form-check-input", role = "switch", id = "switchDestacado" })
+            <input type="checkbox" class="form-check-input" role="switch" id="switchDestacado" 
+                   name="Destacado" value="true" @(Model.Destacado ? "checked" : "") />
             <label class="form-check-label fw-bold" for="switchDestacado">
               <i class="fas fa-star text-warning me-1"></i> Producto Destacado
             </label>
@@ -181,6 +182,15 @@
 </div>
 
 <script>
+// Limpiar formulario antes de enviarlo
+document.querySelector('form').addEventListener('submit', function(e) {
+    // Asegurar que el checkbox se serializa correctamente
+    var checkbox = document.getElementById('switchDestacado');
+    if (checkbox && !checkbox.checked) {
+        checkbox.removeAttribute('checked');
+    }
+});
+
 document.getElementById('imagenFile').addEventListener('change', function(e) {
     var file = e.target.files[0];
     if (!file) return;

@@ -51,9 +51,25 @@ namespace Proyec_Agricola_Web.Controllers
                 return Json(new { success = false, message = "Debes iniciar sesión." });
             }
 
-            if (string.IsNullOrEmpty(direccion) || string.IsNullOrEmpty(ciudad))
+            // Validar campos requeridos
+            if (string.IsNullOrWhiteSpace(direccion))
             {
-                return Json(new { success = false, message = "Completa los campos de dirección y ciudad." });
+                return Json(new { success = false, message = "El campo Dirección es obligatorio." });
+            }
+
+            if (string.IsNullOrWhiteSpace(ciudad))
+            {
+                return Json(new { success = false, message = "El campo Ciudad es obligatorio." });
+            }
+
+            if (string.IsNullOrWhiteSpace(codigoPostal))
+            {
+                return Json(new { success = false, message = "El campo Código Postal es obligatorio." });
+            }
+
+            if (string.IsNullOrWhiteSpace(telefono))
+            {
+                return Json(new { success = false, message = "El campo Teléfono de contacto es obligatorio." });
             }
 
             Carrito carrito = ObtenerCarritoActual();
@@ -84,8 +100,8 @@ namespace Proyec_Agricola_Web.Controllers
                 UsuarioID = usuarioID,
                 DireccionEnvio = direccion,
                 CiudadEnvio = ciudad,
-                CodigoPostalEnvio = codigoPostal ?? "",
-                TelefonoEnvio = telefono ?? "",
+                CodigoPostalEnvio = codigoPostal,
+                TelefonoEnvio = telefono,
                 PaisEnvio = "México",
                 Subtotal = subtotal,
                 ImpuestosTasa = ivaTasa,
