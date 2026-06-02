@@ -1,0 +1,169 @@
+<!-- Modal para Detalles de Pedido -->
+<div class="modal fade" id="modalDetallePedido" tabindex="-1" role="dialog" aria-labelledby="modalDetallePedidoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+            
+            <!-- Modal Header -->
+            <div class="modal-header" style="background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); border: none; border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title" id="modalDetallePedidoLabel" style="color: white; font-weight: 700;">
+                    <i class="fas fa-box"></i> Detalles del Pedido
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body" style="padding: 30px;">
+                
+                <!-- Información del Pedido -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="info-block">
+                            <label class="label-info">Número de Pedido</label>
+                            <p id="modalNumeroPedido" class="value-info">#AGR-20240115-ABC123</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-block">
+                            <label class="label-info">Fecha del Pedido</label>
+                            <p id="modalFechaPedido" class="value-info">15/01/2024 10:30</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estado del Pedido -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="info-block">
+                            <label class="label-info">Estado</label>
+                            <p id="modalEstado" class="value-info">
+                                <span class="badge bg-warning text-dark">Pendiente</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-block">
+                            <label class="label-info">Última Actualización</label>
+                            <p id="modalFechaActualizacion" class="value-info">15/01/2024 10:30</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Datos de Envío -->
+                <div class="card mb-4" style="border: 1px solid #e0e0e0; border-radius: 8px;">
+                    <div class="card-header" style="background-color: #f5f5f5; border-bottom: 1px solid #e0e0e0; border-radius: 8px 8px 0 0;">
+                        <h6 style="margin: 0; color: #333; font-weight: 600;">
+                            <i class="fas fa-truck"></i> Información de Envío
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="label-info">Dirección</label>
+                                <p id="modalDireccionEnvio" class="value-info">Calle Principal 123</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="label-info">Ciudad</label>
+                                <p id="modalCiudadEnvio" class="value-info">Ciudad de México</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="label-info">Código Postal</label>
+                                <p id="modalCodigoPostalEnvio" class="value-info">28001</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="label-info">País</label>
+                                <p id="modalPaisEnvio" class="value-info">México</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="label-info">Teléfono</label>
+                                <p id="modalTelefonoEnvio" class="value-info">+52 555-123-4567</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Productos en el Pedido -->
+                <div class="card mb-4" style="border: 1px solid #e0e0e0; border-radius: 8px;">
+                    <div class="card-header" style="background-color: #f5f5f5; border-bottom: 1px solid #e0e0e0; border-radius: 8px 8px 0 0;">
+                        <h6 style="margin: 0; color: #333; font-weight: 600;">
+                            <i class="fas fa-list"></i> Productos
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0" id="modalProductosTable">
+                                <thead style="background-color: #f9f9f9;">
+                                    <tr>
+                                        <th style="border-top: none;">Producto</th>
+                                        <th style="border-top: none;">Cantidad</th>
+                                        <th style="border-top: none;">Precio Unit.</th>
+                                        <th style="border-top: none;">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Se llena con JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen de Totales -->
+                <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; background-color: #f9fff9;">
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p class="text-muted">Subtotal:</p>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <p id="modalSubtotal" class="value-info">$0.00</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p class="text-muted">Impuestos:</p>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <p id="modalImpuestos" class="value-info">$0.00</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p class="text-muted">Costo de Envío:</p>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <p id="modalCostoEnvio" class="value-info">$0.00</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p style="font-weight: 600; font-size: 1.1rem;">Total:</p>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <p id="modalTotal" class="value-info" style="font-size: 1.2rem; color: #2e7d32; font-weight: 700;">$0.00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer" style="border-top: 1px solid #e0e0e0;">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="fas fa-times"></i> Cerrar
+                </button>
+                <button type="button" class="btn btn-success" id="btnDescargarPedido">
+                    <i class="fas fa-download"></i> Descargar PDF
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

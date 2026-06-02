@@ -172,6 +172,142 @@ namespace Proyec_Agricola_Web.Controllers
             return View(pedido);
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public JsonResult ObtenerDetallePedido(int id)
+        {
+            try
+            {
+                Pedido pedido = pedidoDAL.ObtenerPedidoPorId(id);
+                if (pedido == null)
+                {
+                    return Json(new { success = false, message = "Pedido no encontrado." }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Validar que el usuario autenticado sea el dueño del pedido
+                if (Session["UsuarioID"] != null)
+                {
+                    int usuarioID = Convert.ToInt32(Session["UsuarioID"]);
+                    if (pedido.UsuarioID != usuarioID)
+                    {
+                        return Json(new { success = false, message = "No tienes permiso para ver este pedido." }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+
+                return Json(new
+                {
+                    success = true,
+                    data = new
+                    {
+                        PedidoID = pedido.PedidoID,
+                        NumeroPedido = pedido.NumeroPedido,
+                        FechaPedido = pedido.FechaPedido,
+                        FechaActualizacion = pedido.FechaActualizacion,
+                        Estado = pedido.Estado,
+                        DireccionEnvio = pedido.DireccionEnvio,
+                        CiudadEnvio = pedido.CiudadEnvio,
+                        CodigoPostalEnvio = pedido.CodigoPostalEnvio,
+                        PaisEnvio = pedido.PaisEnvio,
+                        TelefonoEnvio = pedido.TelefonoEnvio,
+                        Subtotal = pedido.Subtotal,
+                        Impuestos = pedido.Impuestos,
+                        CostoEnvio = pedido.CostoEnvio,
+                        Total = pedido.Total,
+                        DetalleItems = pedido.DetalleItems.Select(d => new
+                        {
+                            PedidoDetalleID = d.PedidoDetalleID,
+                            ProductoID = d.ProductoID,
+                            NombreProducto = d.NombreProducto,
+                            ImagenProducto = d.ImagenProducto,
+                            Cantidad = d.Cantidad,
+                            PrecioUnitario = d.PrecioUnitario,
+                            PrecioTotal = d.PrecioTotal
+                        }).ToList()
+                    }
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error: " + ex.Message);
+                return Json(new { success = false, message = "Error al obtener el pedido: " + ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult ActualizarEstadoPedido(int pedidoID, string nuevoEstado)
+        {
+            try
+            {
+                // Validar que el usuario sea administrador
+                if (Session["TipoUsuario"] == null || Convert.ToInt32(Session["TipoUsuario"]) != 1)
+                {
+                    return Json(new { success = false, message = "No tienes permisos para realizar esta acción." });
+                }
+
+                bool resultado = pedidoDAL.ActualizarEstadoPedido(pedidoID, nuevoEstado);
+                if (resultado)
+                {
+                    return Json(new
+                    {
+                        success = true,
+                        message = "Estado del pedido actualizado correctamente.",
+                        nuevoEstado = nuevoEstado,
+                        fechaActualizacion = DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+                    });
+                }
+
+                return Json(new { success = false, message = "Error al actualizar el estado del pedido." });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error: " + ex.Message);
+                return Json(new { success = false, message = "Error: " + ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public FileResult DescargarPDF(int id)
+        {
+            try
+            {
+                Pedido pedido = pedidoDAL.ObtenerPedidoPorId(id);
+                if (pedido == null)
+                    throw new Exception("Pedido no encontrado");
+
+                // Validar que el usuario sea el dueño del pedido o administrador
+                if (Session["UsuarioID"] != null)
+                {
+                    int usuarioID = Convert.ToInt32(Session["UsuarioID"]);
+                    int tipoUsuario = Session["TipoUsuario"] != null ? Convert.ToInt32(Session["TipoUsuario"]) : 0;
+
+                    if (pedido.UsuarioID != usuarioID && tipoUsuario != 1)
+                    {
+                        throw new Exception("No tienes permiso para descargar este archivo.");
+                    }
+                }
+
+                // Generar PDF (aquí puedes usar iTextSharp u otra librería)
+                // Por ahora retornamos un archivo de ejemplo
+                byte[] pdfBytes = GenerarPDF(pedido);
+
+                return File(pdfBytes, "application/pdf", $"Pedido_{pedido.NumeroPedido}.pdf");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error: " + ex.Message);
+                TempData["Error"] = "Error al descargar el PDF: " + ex.Message;
+                return null;
+            }
+        }
+
+        private byte[] GenerarPDF(Pedido pedido)
+        {
+            // Placeholder para generación de PDF
+            // Aquí deberías usar iTextSharp o similar
+            // Por ahora retornamos un array vacío
+            return System.Text.Encoding.UTF8.GetBytes("PDF Placeholder");
+        }
+
         private Carrito ObtenerCarritoActual()
         {
             if (Session["UsuarioID"] != null)

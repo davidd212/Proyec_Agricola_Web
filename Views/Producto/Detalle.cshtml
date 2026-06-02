@@ -10,7 +10,7 @@
             <div style="background:#f9fff9; border-radius:16px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
             @if (!string.IsNullOrEmpty(Model.ImagenRuta))
             {
-                <img src="@Model.ImagenRuta" class="img-fluid" alt="@Model.Nombre" style="max-height:400px; width:100%; object-fit:contain; border-radius:12px; padding:10px; background:#fff;" onerror="this.onerror=null; this.src=\x27/Content/Images/Productos/no-image.png\x27;" />
+                <img src="@Model.ImagenRuta" class="img-fluid" alt="@Model.Nombre" style="max-height:400px; width:100%; object-fit:contain; border-radius:12px; padding:10px; background:#fff;" onerror="this.onerror=null; this.src='/Content/Images/Productos/no-image.png';" />
             }
             else
             {

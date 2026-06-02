@@ -157,21 +157,32 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\css\modal-detalle.css" />
     <Content Include="Content\Images\compost-organico.svg" />
     <Content Include="Content\Images\fertilizante-npk.svg" />
     <Content Include="Content\Images\herbicida-selectivo.svg" />
     <Content Include="Content\Images\pesticida-organico.svg" />
     <Content Include="Content\Images\semillas-maiz.svg" />
     <Content Include="Content\Images\semillas-trigo.svg" />
+    <Content Include="Content\js\modal-detalle-pedido.js" />
+    <Content Include="Database\Scripts\02_Ejemplos_Pruebas.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="PROYECTO_COMPLETADO.txt" />
+    <Content Include="RESUMEN_FINAL.txt" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="IMPLEMENTACION_GUIA.md" />
+    <Content Include="REFERENCIA_RAPIDA.md" />
+    <Content Include="RESUMEN_VISUAL.md" />
+    <Content Include="INDICE_DOCUMENTACION.md" />
+    <Content Include="GUIA_EJECUTAR_SQL.md" />
+    <Content Include="README.md" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -184,6 +195,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Styles\StylesL.css" />
+    <Content Include="Views\Pedido\DetalleModal.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -213,6 +225,8 @@
     <Content Include="Views\Pedido\Confirmacion.cshtml" />
     <Content Include="Views\Pedido\Historial.cshtml" />
     <Content Include="Views\Pedido\Detalle.cshtml" />
+    <Content Include="Views\Pedido\DetalleModal.cshtml" />
+    <Content Include="VERIFICACION_CHECKLIST.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
