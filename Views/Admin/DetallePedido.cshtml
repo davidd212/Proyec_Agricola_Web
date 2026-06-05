@@ -1,0 +1,181 @@
+@model Proyec_Agricola_Web.Models.Pedido
+
+@{
+    ViewBag.Title = "Pedido #" + Model.PedidoID + " - Administración";
+}
+
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Dashboard", "Admin")">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Pedidos", "Admin")">Pedidos</a></li>
+                <li class="breadcrumb-item active">Pedido #@Model.PedidoID</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:24px;">
+        <h1 style="color:#1a1a1a; font-weight:700; margin:0;">
+            <i class="fas fa-box" style="color:#2e7d32;"></i> Pedido #@Model.PedidoID
+        </h1>
+        <div style="display:flex; gap:8px; align-items:center;">
+            <span style="font-size:0.9rem; color:#666;">@Model.NumeroPedido</span>
+            @switch (Model.Estado)
+            {
+                case "Pendiente": <span class="badge bg-warning text-dark" style="font-size:0.85rem; padding:8px 16px;">Pendiente</span>; break;
+                case "Procesando": <span class="badge bg-info text-white" style="font-size:0.85rem; padding:8px 16px;">Procesando</span>; break;
+                case "Enviado": <span class="badge bg-primary" style="font-size:0.85rem; padding:8px 16px;">Enviado</span>; break;
+                case "Entregado": <span class="badge bg-success" style="font-size:0.85rem; padding:8px 16px;">Entregado</span>; break;
+                case "Cancelado": <span class="badge bg-danger" style="font-size:0.85rem; padding:8px 16px;">Cancelado</span>; break;
+                default: <span class="badge bg-secondary" style="font-size:0.85rem; padding:8px 16px;">@Model.Estado</span>; break;
+            }
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;">
+        <div style="background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,0.06); padding:24px;">
+            <h5 style="color:#1a1a1a; font-weight:600; margin-bottom:16px;"><i class="fas fa-user"></i> Información del Cliente</h5>
+            <p style="margin-bottom:6px;"><strong>Nombre:</strong> @Model.NombreCliente</p>
+            <p style="margin-bottom:6px;"><strong>Dirección:</strong> @Model.DireccionEnvio</p>
+            <p style="margin-bottom:6px;"><strong>Ciudad:</strong> @Model.CiudadEnvio, @Model.CodigoPostalEnvio</p>
+            <p style="margin-bottom:6px;"><strong>Teléfono:</strong> @Model.TelefonoEnvio</p>
+            <p style="margin-bottom:0;"><strong>Notas del cliente:</strong> @(string.IsNullOrEmpty(Model.Notas) ? "Sin notas" : Model.Notas)</p>
+        </div>
+
+        <div style="background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,0.06); padding:24px;">
+            <h5 style="color:#1a1a1a; font-weight:600; margin-bottom:16px;"><i class="fas fa-credit-card"></i> Resumen del Pedido</h5>
+            <p style="margin-bottom:6px;"><strong>Fecha:</strong> @Model.FechaPedido.ToString("dd/MM/yyyy HH:mm")</p>
+            <p style="margin-bottom:6px;"><strong>Subtotal:</strong> $@Model.Subtotal.ToString("F2")</p>
+            <p style="margin-bottom:6px;"><strong>IVA:</strong> $@Model.Impuestos.ToString("F2")</p>
+            <p style="margin-bottom:6px;"><strong>Envío:</strong> $@Model.CostoEnvio.ToString("F2")</p>
+            <p style="margin-bottom:0; font-size:1.1rem; font-weight:700; color:#2e7d32;"><strong>Total:</strong> $@Model.Total.ToString("F2")</p>
+        </div>
+    </div>
+
+    <div style="background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,0.06); padding:24px; margin-bottom:24px;">
+        <h5 style="color:#1a1a1a; font-weight:600; margin-bottom:16px;"><i class="fas fa-truck"></i> Acciones</h5>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+            <label style="font-weight:500; color:#555;">Cambiar estado:</label>
+            <select id="estadoSelect" class="form-control" style="width:180px;">
+                <option value="Pendiente" @(Model.Estado == "Pendiente" ? "selected" : "")>Pendiente</option>
+                <option value="Procesando" @(Model.Estado == "Procesando" ? "selected" : "")>Procesando</option>
+                <option value="Enviado" @(Model.Estado == "Enviado" ? "selected" : "")>Enviado</option>
+                <option value="Entregado" @(Model.Estado == "Entregado" ? "selected" : "")>Entregado</option>
+                <option value="Cancelado" @(Model.Estado == "Cancelado" ? "selected" : "")>Cancelado</option>
+            </select>
+            <button class="btn btn-success" onclick="cambiarEstado(@Model.PedidoID)" style="border-radius:8px;">
+                <i class="fas fa-check"></i> Actualizar
+            </button>
+        </div>
+        <hr />
+        <h6 style="font-weight:600; color:#555;">Notas de administración</h6>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <textarea id="notasAdmin" class="form-control" rows="3" style="flex:1;">@Model.Notas_Admin</textarea>
+            <button class="btn btn-outline-success" onclick="guardarNotas(@Model.PedidoID)" style="border-radius:8px; align-self:flex-end;">
+                <i class="fas fa-save"></i> Guardar
+            </button>
+        </div>
+    </div>
+
+    <div style="background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,0.06); overflow:hidden;">
+        <h5 style="padding:20px 24px 0; color:#1a1a1a; font-weight:600; margin:0;">
+            <i class="fas fa-list"></i> Productos del Pedido
+        </h5>
+        <div style="overflow-x:auto; padding:16px 24px 24px;">
+            <table style="width:100%; border-collapse:collapse;">
+                <thead>
+                    <tr style="border-bottom:2px solid #e0e0e0;">
+                        <th style="padding:12px 8px; text-align:left; font-size:0.85rem; color:#666;">Producto</th>
+                        <th style="padding:12px 8px; text-align:center; font-size:0.85rem; color:#666;">Cantidad</th>
+                        <th style="padding:12px 8px; text-align:right; font-size:0.85rem; color:#666;">Precio Unit.</th>
+                        <th style="padding:12px 8px; text-align:right; font-size:0.85rem; color:#666;">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.DetalleItems)
+                    {
+                        <tr style="border-bottom:1px solid #f0f0f0;">
+                            <td style="padding:12px 8px;">
+                                <div style="display:flex; align-items:center; gap:12px;">
+                                    @if (!string.IsNullOrEmpty(item.ImagenProducto))
+                                    {
+                                        <img src="@item.ImagenProducto" style="width:50px; height:50px; object-fit:contain; border-radius:8px; background:#f8fff8;" />
+                                    }
+                                    <span style="font-weight:500;">@item.NombreProducto</span>
+                                </div>
+                            </td>
+                            <td style="padding:12px 8px; text-align:center;">@item.Cantidad</td>
+                            <td style="padding:12px 8px; text-align:right;">$@item.PrecioUnitario.ToString("F2")</td>
+                            <td style="padding:12px 8px; text-align:right; font-weight:600;">$@item.PrecioTotal.ToString("F2")</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" style="padding:12px 8px; text-align:right; font-weight:600;">Total:</td>
+                        <td style="padding:12px 8px; text-align:right; font-weight:700; color:#2e7d32; font-size:1.1rem;">$@Model.Total.ToString("F2")</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div style="margin-top:24px;">
+        <a href="@Url.Action("Pedidos", "Admin")" class="btn btn-outline-secondary" style="border-radius:8px;">
+            <i class="fas fa-arrow-left"></i> Volver a Pedidos
+        </a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function cambiarEstado(pedidoID) {
+        var nuevoEstado = document.getElementById('estadoSelect').value;
+        if (!confirm('¿Estás seguro de cambiar el estado a "' + nuevoEstado + '"?')) return;
+
+        $.ajax({
+            url: '@Url.Action("CambiarEstadoPedido", "Admin")',
+            type: 'POST',
+            data: {
+                pedidoID: pedidoID,
+                nuevoEstado: nuevoEstado
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert('Error al actualizar el estado.');
+            }
+        });
+    }
+
+    function guardarNotas(pedidoID) {
+        var notas = document.getElementById('notasAdmin').value;
+        $.ajax({
+            url: '@Url.Action("GuardarNotasAdmin", "Admin")',
+            type: 'POST',
+            data: {
+                pedidoID: pedidoID,
+                notas: notas
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert('Notas guardadas correctamente.');
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert('Error al guardar las notas.');
+            }
+        });
+    }
+</script>

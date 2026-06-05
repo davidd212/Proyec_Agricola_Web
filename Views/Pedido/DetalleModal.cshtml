@@ -2,25 +2,25 @@
 <div class="modal fade" id="modalDetallePedido" tabindex="-1" role="dialog" aria-labelledby="modalDetallePedidoLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
-            
+
             <!-- Modal Header -->
             <div class="modal-header" style="background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); border: none; border-radius: 12px 12px 0 0;">
                 <h5 class="modal-title" id="modalDetallePedidoLabel" style="color: white; font-weight: 700;">
                     <i class="fas fa-box"></i> Detalles del Pedido
                 </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" style="color: white;">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
             <!-- Modal Body -->
             <div class="modal-body" style="padding: 30px;">
-                
-                <!-- Informaci髇 del Pedido -->
+
+                <!-- Informaci贸n del Pedido -->
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <div class="info-block">
-                            <label class="label-info">N鷐ero de Pedido</label>
+                            <label class="label-info">N煤mero de Pedido</label>
                             <p id="modalNumeroPedido" class="value-info">#AGR-20240115-ABC123</p>
                         </div>
                     </div>
@@ -44,43 +44,43 @@
                     </div>
                     <div class="col-md-6">
                         <div class="info-block">
-                            <label class="label-info">趌tima Actualizaci髇</label>
+                            <label class="label-info">脷ltima Actualizaci贸n</label>
                             <p id="modalFechaActualizacion" class="value-info">15/01/2024 10:30</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Datos de Env韔 -->
+                <!-- Datos de Env铆o -->
                 <div class="card mb-4" style="border: 1px solid #e0e0e0; border-radius: 8px;">
                     <div class="card-header" style="background-color: #f5f5f5; border-bottom: 1px solid #e0e0e0; border-radius: 8px 8px 0 0;">
                         <h6 style="margin: 0; color: #333; font-weight: 600;">
-                            <i class="fas fa-truck"></i> Informaci髇 de Env韔
+                            <i class="fas fa-truck"></i> Informaci贸n de Env铆o
                         </h6>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label class="label-info">Direcci髇</label>
+                                <label class="label-info">Direcci贸n</label>
                                 <p id="modalDireccionEnvio" class="value-info">Calle Principal 123</p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="label-info">Ciudad</label>
-                                <p id="modalCiudadEnvio" class="value-info">Ciudad de M閤ico</p>
+                                <p id="modalCiudadEnvio" class="value-info">Ciudad de M茅xico</p>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="label-info">C骴igo Postal</label>
+                                <label class="label-info">C贸digo Postal</label>
                                 <p id="modalCodigoPostalEnvio" class="value-info">28001</p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="label-info">Pa韘</label>
-                                <p id="modalPaisEnvio" class="value-info">M閤ico</p>
+                                <label class="label-info">Pa铆s</label>
+                                <p id="modalPaisEnvio" class="value-info">M茅xico</p>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="label-info">Tel閒ono</label>
+                                <label class="label-info">Tel茅fono</label>
                                 <p id="modalTelefonoEnvio" class="value-info">+52 555-123-4567</p>
                             </div>
                         </div>
@@ -134,10 +134,10 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <p class="text-muted">Costo de Env韔:</p>
+                                <p class="text-muted">Env铆o:</p>
                             </div>
                             <div class="col-md-6 text-right">
-                                <p id="modalCostoEnvio" class="value-info">$0.00</p>
+                                <p id="modalCostoEnvio" class="value-info" style="color: #28a745; font-weight: 700;">GRATIS</p>
                             </div>
                         </div>
                         <hr>
@@ -156,7 +156,7 @@
 
             <!-- Modal Footer -->
             <div class="modal-footer" style="border-top: 1px solid #e0e0e0;">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="fas fa-times"></i> Cerrar
                 </button>
                 <button type="button" class="btn btn-success" id="btnDescargarPedido">

@@ -138,6 +138,9 @@
     <Compile Include="Models\ProductoDAL.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\UsuarioDAL.cs" />
+    <Compile Include="Models\Mensaje.cs" />
+    <Compile Include="Models\MensajeDAL.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

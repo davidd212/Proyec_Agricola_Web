@@ -29,7 +29,12 @@ namespace Proyec_Agricola_Web.Controllers
             Producto producto = productDAL.ObtenerProductoPorId(id);
             if (producto == null)
                 return HttpNotFound();
-            
+
+            ViewBag.ProductosRelacionados = productDAL.ObtenerProductosRelacionados(
+                id,
+                producto.CategoriaID,
+                8
+            );
             return View(producto);
         }
 

@@ -2,6 +2,20 @@
     ViewBag.Title = "Contacto - AgroVentas";
 }
 
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success text-center" style="border-radius:0; margin:0;">
+        <i class="fas fa-check-circle"></i> @TempData["MensajeExito"]
+    </div>
+}
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-warning text-center" style="border-radius:0; margin:0;">
+        <i class="fas fa-exclamation-triangle"></i> @TempData["Mensaje"]
+    </div>
+}
+
 <!-- Breadcrumb -->
 <div class="bg-light py-3 border-bottom">
     <div class="container">
@@ -108,7 +122,8 @@
                     <h5 class="mb-0">Envíanos un mensaje</h5>
                 </div>
                 <div class="card-body p-4">
-                    <form method="post" action="" id="contactForm">
+                    <form method="post" action="@Url.Action("EnviarContacto", "Home")" id="contactForm">
+                        @Html.AntiForgeryToken()
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label" for="nombre">Nombre</label>
@@ -274,8 +289,7 @@
                 return false;
             }
 
-            alert('¡Gracias! Tu mensaje ha sido enviado exitosamente. Nos pondremos en contacto pronto.');
-            return false; // Prevent actual form submission for demo
+            return true;
         }
     </script>
 }

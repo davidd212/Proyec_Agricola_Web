@@ -1,0 +1,104 @@
+@model Proyec_Agricola_Web.Models.Mensaje
+
+@{
+    ViewBag.Title = "Mensaje de " + Model.Nombre + " - Administración";
+}
+
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Dashboard", "Admin")">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Mensajes", "Admin")">Mensajes</a></li>
+                <li class="breadcrumb-item active">Mensaje de @Model.Nombre</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div style="max-width:800px; margin:0 auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:24px;">
+            <h1 style="color:#1a1a1a; font-weight:700; margin:0;">
+                <i class="fas fa-envelope-open-text" style="color:#2e7d32;"></i> Mensaje
+            </h1>
+            <div style="display:flex; gap:8px;">
+                <a href="@Url.Action("Mensajes", "Admin")" class="btn btn-outline-secondary" style="border-radius:8px;">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </a>
+                <button class="btn btn-outline-danger" onclick="eliminarMensaje(@Model.MensajeID)" style="border-radius:8px;">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+
+        <div style="background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,0.06); overflow:hidden;">
+            <div style="padding:24px; border-bottom:1px solid #f0f0f0;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                    <div>
+                        <label style="font-size:0.8rem; color:#999; text-transform:uppercase; letter-spacing:0.5px;">Nombre</label>
+                        <p style="font-weight:600; margin:4px 0 0;">@Model.Nombre</p>
+                    </div>
+                    <div>
+                        <label style="font-size:0.8rem; color:#999; text-transform:uppercase; letter-spacing:0.5px;">Email</label>
+                        <p style="font-weight:600; margin:4px 0 0;">
+                            <a href="mailto:@Model.Email" style="color:#2e7d32;">@Model.Email</a>
+                        </p>
+                    </div>
+                    <div>
+                        <label style="font-size:0.8rem; color:#999; text-transform:uppercase; letter-spacing:0.5px;">Teléfono</label>
+                        <p style="margin:4px 0 0;">@(string.IsNullOrEmpty(Model.Telefono) ? "—" : Model.Telefono)</p>
+                    </div>
+                    <div>
+                        <label style="font-size:0.8rem; color:#999; text-transform:uppercase; letter-spacing:0.5px;">Asunto</label>
+                        <p style="margin:4px 0 0;">
+                            <span style="background:#e8f5e9; color:#2e7d32; padding:4px 12px; border-radius:20px; font-size:0.9rem;">
+                                @(string.IsNullOrEmpty(Model.Asunto) ? "General" : Model.Asunto)
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div style="margin-top:12px;">
+                    <label style="font-size:0.8rem; color:#999; text-transform:uppercase; letter-spacing:0.5px;">Fecha de envío</label>
+                    <p style="margin:4px 0 0;">@Model.FechaEnvio.ToString("dd/MM/yyyy 'a las' HH:mm")</p>
+                </div>
+                @if (Model.Leido && Model.FechaLeido.HasValue)
+                {
+                    <div style="margin-top:4px;">
+                        <label style="font-size:0.8rem; color:#999; text-transform:uppercase; letter-spacing:0.5px;">Leído el</label>
+                        <p style="margin:4px 0 0;">@Model.FechaLeido.Value.ToString("dd/MM/yyyy 'a las' HH:mm")</p>
+                    </div>
+                }
+            </div>
+            <div style="padding:24px;">
+                <label style="font-size:0.8rem; color:#999; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px; display:block;">Mensaje</label>
+                <div style="background:#f9fff9; border-radius:12px; padding:20px; line-height:1.7; white-space:pre-wrap;">
+                    @Model.MensajeTexto
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function eliminarMensaje(id) {
+        if (!confirm('¿Estás seguro de eliminar este mensaje?')) return;
+
+        $.ajax({
+            url: '@Url.Action("EliminarMensaje", "Admin")',
+            type: 'POST',
+            data: { id: id },
+            success: function (response) {
+                if (response.success) {
+                    window.location.href = '@Url.Action("Mensajes", "Admin")';
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert('Error al eliminar el mensaje.');
+            }
+        });
+    }
+</script>

@@ -1,0 +1,107 @@
+@model List<Proyec_Agricola_Web.Models.Pedido>
+
+@{
+    ViewBag.Title = "Pedidos - Administración";
+}
+
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Dashboard", "Admin")">Dashboard</a></li>
+                <li class="breadcrumb-item active">Pedidos</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    <h1 style="color:#1a1a1a; font-weight:700; margin-bottom:20px;">
+        <i class="fas fa-box" style="color:#2e7d32;"></i> Pedidos de Clientes
+    </h1>
+
+    <div style="background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,0.06); padding:20px; margin-bottom:24px;">
+        <form method="get" action="@Url.Action("Pedidos", "Admin")" style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+            <div>
+                <label style="font-size:0.85rem; color:#666; display:block; margin-bottom:4px;">Estado</label>
+                <select name="estado" class="form-control" style="width:160px;">
+                    <option value="">Todos</option>
+                    <option value="Pendiente" @(ViewBag.EstadoSeleccionado == "Pendiente" ? "selected" : "")>Pendiente</option>
+                    <option value="Procesando" @(ViewBag.EstadoSeleccionado == "Procesando" ? "selected" : "")>Procesando</option>
+                    <option value="Enviado" @(ViewBag.EstadoSeleccionado == "Enviado" ? "selected" : "")>Enviado</option>
+                    <option value="Entregado" @(ViewBag.EstadoSeleccionado == "Entregado" ? "selected" : "")>Entregado</option>
+                    <option value="Cancelado" @(ViewBag.EstadoSeleccionado == "Cancelado" ? "selected" : "")>Cancelado</option>
+                </select>
+            </div>
+            <div>
+                <label style="font-size:0.85rem; color:#666; display:block; margin-bottom:4px;">Desde</label>
+                <input type="date" name="desde" class="form-control" value="@(ViewBag.Desde?.ToString("yyyy-MM-dd") ?? "")" style="width:160px;" />
+            </div>
+            <div>
+                <label style="font-size:0.85rem; color:#666; display:block; margin-bottom:4px;">Hasta</label>
+                <input type="date" name="hasta" class="form-control" value="@(ViewBag.Hasta?.ToString("yyyy-MM-dd") ?? "")" style="width:160px;" />
+            </div>
+            <button type="submit" class="btn btn-success" style="border-radius:8px;">
+                <i class="fas fa-filter"></i> Filtrar
+            </button>
+            <a href="@Url.Action("Pedidos", "Admin")" class="btn btn-outline-secondary" style="border-radius:8px;">
+                <i class="fas fa-times"></i> Limpiar
+            </a>
+        </form>
+    </div>
+
+    <div style="background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,0.06); overflow:hidden;">
+        @if (Model != null && Model.Count > 0)
+        {
+            <div style="overflow-x:auto;">
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead style="background:#2e7d32; color:white;">
+                        <tr>
+                            <th style="padding:14px 12px; text-align:left;">Pedido</th>
+                            <th style="padding:14px 12px; text-align:left;">Cliente</th>
+                            <th style="padding:14px 12px; text-align:left;">Fecha</th>
+                            <th style="padding:14px 12px; text-align:left;">Total</th>
+                            <th style="padding:14px 12px; text-align:left;">Estado</th>
+                            <th style="padding:14px 12px; text-align:left;">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var pedido in Model)
+                        {
+                            <tr style="border-bottom:1px solid #f0f0f0;">
+                                <td style="padding:14px 12px; font-weight:600;">#@pedido.PedidoID</td>
+                                <td style="padding:14px 12px;">@pedido.NombreCliente</td>
+                                <td style="padding:14px 12px; color:#666;">@pedido.FechaPedido.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td style="padding:14px 12px; font-weight:600;">$@pedido.Total.ToString("F2")</td>
+                                <td style="padding:14px 12px;">
+                                    @switch (pedido.Estado)
+                                    {
+                                        case "Pendiente": <span class="badge bg-warning text-dark">Pendiente</span>; break;
+                                        case "Procesando": <span class="badge bg-info text-white">Procesando</span>; break;
+                                        case "Enviado": <span class="badge bg-primary">Enviado</span>; break;
+                                        case "Entregado": <span class="badge bg-success">Entregado</span>; break;
+                                        case "Cancelado": <span class="badge bg-danger">Cancelado</span>; break;
+                                        default: <span class="badge bg-secondary">@pedido.Estado</span>; break;
+                                    }
+                                </td>
+                                <td style="padding:14px 12px;">
+                                    <a href="@Url.Action("DetallePedido", "Admin", new { id = pedido.PedidoID })" class="btn btn-sm btn-outline-success" style="border-radius:20px;">
+                                        <i class="fas fa-eye"></i> Ver
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div style="text-align:center; padding:60px 20px;">
+                <i class="fas fa-box-open fa-3x" style="color:#28a745; opacity:0.2; margin-bottom:15px;"></i>
+                <p class="text-muted">No se encontraron pedidos con los filtros seleccionados.</p>
+            </div>
+        }
+    </div>
+</div>

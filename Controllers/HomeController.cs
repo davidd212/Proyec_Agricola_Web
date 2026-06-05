@@ -1,4 +1,5 @@
 ﻿using Proyec_Agricola_Web.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -62,7 +63,7 @@ namespace Proyec_Agricola_Web.Controllers
             );
 
             ViewBag.ProductosRelacionados = productosRelacionados;
-            return View(producto);
+            return View("~/Views/Producto/Detalle.cshtml", producto);
         }
 
         public ActionResult Carrito()
@@ -80,6 +81,34 @@ namespace Proyec_Agricola_Web.Controllers
         {
             ViewBag.Message = "Contacto - AgroVentas";
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EnviarContacto(string nombre, string email, string telefono, string asunto, string mensaje)
+        {
+            if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(mensaje))
+            {
+                TempData["Mensaje"] = "Por favor completa todos los campos requeridos.";
+                return RedirectToAction("Contact");
+            }
+
+            Mensaje nuevoMensaje = new Mensaje
+            {
+                Nombre = nombre,
+                Email = email,
+                Telefono = telefono ?? "",
+                Asunto = asunto ?? "",
+                MensajeTexto = mensaje,
+                FechaEnvio = DateTime.Now,
+                Leido = false
+            };
+
+            MensajeDAL mensajeDAL = new MensajeDAL();
+            mensajeDAL.InsertarMensaje(nuevoMensaje);
+
+            TempData["MensajeExito"] = "¡Gracias! Tu mensaje ha sido enviado exitosamente. Nos pondremos en contacto pronto.";
+            return RedirectToAction("Contact");
         }
     }
 }

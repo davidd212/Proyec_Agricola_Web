@@ -1,0 +1,111 @@
+@model List<Proyec_Agricola_Web.Models.Mensaje>
+
+@{
+    ViewBag.Title = "Mensajes - Administración";
+}
+
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Dashboard", "Admin")">Dashboard</a></li>
+                <li class="breadcrumb-item active">Mensajes</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:24px;">
+        <h1 style="color:#1a1a1a; font-weight:700; margin:0;">
+            <i class="fas fa-envelope" style="color:#2e7d32;"></i> Bandeja de Mensajes
+            @if (ViewBag.NoLeidos > 0)
+            {
+                <span class="badge bg-danger" style="font-size:0.8rem; vertical-align:middle;">@ViewBag.NoLeidos no leídos</span>
+            }
+        </h1>
+    </div>
+
+    <div style="background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,0.06); overflow:hidden;">
+        @if (Model != null && Model.Count > 0)
+        {
+            <div style="overflow-x:auto;">
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead style="background:#2e7d32; color:white;">
+                        <tr>
+                            <th style="padding:14px 12px; text-align:left;">Estado</th>
+                            <th style="padding:14px 12px; text-align:left;">Nombre</th>
+                            <th style="padding:14px 12px; text-align:left;">Email</th>
+                            <th style="padding:14px 12px; text-align:left;">Asunto</th>
+                            <th style="padding:14px 12px; text-align:left;">Fecha</th>
+                            <th style="padding:14px 12px; text-align:left;">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var mensaje in Model)
+                        {
+                            <tr style="border-bottom:1px solid #f0f0f0; @(!mensaje.Leido ? "background:#f0fff4;" : "")">
+                                <td style="padding:14px 12px;">
+                                    @if (!mensaje.Leido)
+                                    {
+                                        <span style="display:inline-block; width:10px; height:10px; background:#28a745; border-radius:50%;"></span>
+                                    }
+                                    else
+                                    {
+                                        <span style="display:inline-block; width:10px; height:10px; background:#ccc; border-radius:50%;"></span>
+                                    }
+                                </td>
+                                <td style="padding:14px 12px; font-weight:@(!mensaje.Leido ? "600" : "normal");">@mensaje.Nombre</td>
+                                <td style="padding:14px 12px; color:#666;">@mensaje.Email</td>
+                                <td style="padding:14px 12px;">
+                                    <span style="background:#e8f5e9; color:#2e7d32; padding:4px 10px; border-radius:20px; font-size:0.8rem;">
+                                        @(string.IsNullOrEmpty(mensaje.Asunto) ? "General" : mensaje.Asunto)
+                                    </span>
+                                </td>
+                                <td style="padding:14px 12px; color:#666; font-size:0.9rem;">@mensaje.FechaEnvio.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td style="padding:14px 12px;">
+                                    <a href="@Url.Action("VerMensaje", "Admin", new { id = mensaje.MensajeID })" class="btn btn-sm btn-outline-success" style="border-radius:20px;">
+                                        <i class="fas fa-eye"></i> Ver
+                                    </a>
+                                    <button class="btn btn-sm btn-outline-danger" style="border-radius:20px;" onclick="eliminarMensaje(@mensaje.MensajeID)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div style="text-align:center; padding:60px 20px;">
+                <i class="fas fa-inbox fa-3x" style="color:#28a745; opacity:0.2; margin-bottom:15px;"></i>
+                <p class="text-muted">No hay mensajes.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    function eliminarMensaje(id) {
+        if (!confirm('¿Estás seguro de eliminar este mensaje?')) return;
+
+        $.ajax({
+            url: '@Url.Action("EliminarMensaje", "Admin")',
+            type: 'POST',
+            data: { id: id },
+            success: function (response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert('Error al eliminar el mensaje.');
+            }
+        });
+    }
+</script>

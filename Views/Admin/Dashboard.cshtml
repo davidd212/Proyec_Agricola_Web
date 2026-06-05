@@ -1,0 +1,146 @@
+@{
+    ViewBag.Title = "Dashboard - Administración";
+}
+
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    <h1 style="color:#1a1a1a; font-weight:700; margin-bottom:30px;">
+        <i class="fas fa-tachometer-alt" style="color:#2e7d32;"></i> Dashboard
+    </h1>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-info">@TempData["Mensaje"]</div>
+    }
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px; margin-bottom:40px;">
+        <div style="background:linear-gradient(135deg, #2e7d32, #1b5e20); border-radius:16px; padding:24px; color:white;">
+            <div style="font-size:0.85rem; opacity:0.9; margin-bottom:8px;"><i class="fas fa-box"></i> Productos</div>
+            <div style="font-size:2rem; font-weight:700;">@ViewBag.TotalProductos</div>
+        </div>
+        <div style="background:linear-gradient(135deg, #1565C0, #0D47A1); border-radius:16px; padding:24px; color:white;">
+            <div style="font-size:0.85rem; opacity:0.9; margin-bottom:8px;"><i class="fas fa-shopping-cart"></i> Pedidos</div>
+            <div style="font-size:2rem; font-weight:700;">@ViewBag.TotalPedidos</div>
+        </div>
+        <div style="background:linear-gradient(135deg, #E65100, #BF360C); border-radius:16px; padding:24px; color:white;">
+            <div style="font-size:0.85rem; opacity:0.9; margin-bottom:8px;"><i class="fas fa-users"></i> Clientes</div>
+            <div style="font-size:2rem; font-weight:700;">@ViewBag.TotalUsuarios</div>
+        </div>
+        <div style="background:linear-gradient(135deg, #6A1B9A, #4A148C); border-radius:16px; padding:24px; color:white;">
+            <div style="font-size:0.85rem; opacity:0.9; margin-bottom:8px;"><i class="fas fa-envelope"></i> Mensajes no leídos</div>
+            <div style="font-size:2rem; font-weight:700;">@ViewBag.MensajesNoLeidos</div>
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px; margin-bottom:40px;">
+        <div style="background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,0.06); padding:24px;">
+            <h5 style="color:#1a1a1a; font-weight:600; margin-bottom:16px;"><i class="fas fa-chart-pie"></i> Pedidos por Estado</h5>
+            <div style="display:flex; flex-wrap:wrap; gap:12px;">
+                <span style="background:#ffc107; color:#333; padding:8px 16px; border-radius:20px; font-size:0.85rem; font-weight:600;">
+                    Pendientes: @ViewBag.PedidosPendientes
+                </span>
+                <span style="background:#17a2b8; color:white; padding:8px 16px; border-radius:20px; font-size:0.85rem; font-weight:600;">
+                    Procesando: @ViewBag.PedidosProcesando
+                </span>
+                <span style="background:#007bff; color:white; padding:8px 16px; border-radius:20px; font-size:0.85rem; font-weight:600;">
+                    Enviados: @ViewBag.PedidosEnviados
+                </span>
+                <span style="background:#28a745; color:white; padding:8px 16px; border-radius:20px; font-size:0.85rem; font-weight:600;">
+                    Entregados: @ViewBag.PedidosEntregados
+                </span>
+                <span style="background:#dc3545; color:white; padding:8px 16px; border-radius:20px; font-size:0.85rem; font-weight:600;">
+                    Cancelados: @ViewBag.PedidosCancelados
+                </span>
+            </div>
+            <hr />
+            <p style="color:#666; font-size:0.9rem;">
+                <strong>Ingresos totales:</strong> $@ViewBag.IngresosTotales.ToString("F2")
+            </p>
+        </div>
+
+        <div style="background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,0.06); padding:24px;">
+            <h5 style="color:#1a1a1a; font-weight:600; margin-bottom:16px;"><i class="fas fa-exclamation-triangle" style="color:#dc3545;"></i> Productos con Stock Bajo</h5>
+            @{
+                var stockBajo = ViewBag.ProductosStockBajo as List<Proyec_Agricola_Web.Models.Producto>;
+            }
+            @if (stockBajo != null && stockBajo.Count > 0)
+            {
+                <div style="max-height:240px; overflow-y:auto;">
+                    @foreach (var p in stockBajo)
+                    {
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #f0f0f0;">
+                            <span style="font-size:0.85rem; color:#1a1a1a;">@p.Nombre</span>
+                            <span style="font-size:0.85rem; font-weight:600; color:@(p.Stock <= 5 ? "#dc3545" : "#ffc107");">@p.Stock uds.</span>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No hay productos con stock bajo.</p>
+            }
+        </div>
+    </div>
+
+    <div style="background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,0.06); padding:24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h5 style="color:#1a1a1a; font-weight:600; margin:0;"><i class="fas fa-clock"></i> Últimos Pedidos</h5>
+            <a href="@Url.Action("Pedidos", "Admin")" style="color:#2e7d32; font-size:0.9rem;">Ver todos →</a>
+        </div>
+        @{
+            var ultimosPedidos = ViewBag.UltimosPedidos as List<Proyec_Agricola_Web.Models.Pedido>;
+        }
+        @if (ultimosPedidos != null && ultimosPedidos.Count > 0)
+        {
+            <div style="overflow-x:auto;">
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead>
+                        <tr style="border-bottom:2px solid #e0e0e0;">
+                            <th style="padding:12px 8px; text-align:left; font-size:0.85rem; color:#666;">Pedido</th>
+                            <th style="padding:12px 8px; text-align:left; font-size:0.85rem; color:#666;">Cliente</th>
+                            <th style="padding:12px 8px; text-align:left; font-size:0.85rem; color:#666;">Fecha</th>
+                            <th style="padding:12px 8px; text-align:left; font-size:0.85rem; color:#666;">Total</th>
+                            <th style="padding:12px 8px; text-align:left; font-size:0.85rem; color:#666;">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var pedido in ultimosPedidos)
+                        {
+                            <tr style="border-bottom:1px solid #f0f0f0;">
+                                <td style="padding:12px 8px; font-weight:600;">#@pedido.PedidoID</td>
+                                <td style="padding:12px 8px; color:#666;">@pedido.NombreCliente</td>
+                                <td style="padding:12px 8px; color:#666;">@pedido.FechaPedido.ToString("dd/MM/yyyy")</td>
+                                <td style="padding:12px 8px; font-weight:600;">$@pedido.Total.ToString("F2")</td>
+                                <td style="padding:12px 8px;">
+                                    @switch (pedido.Estado)
+                                    {
+                                        case "Pendiente": <span class="badge bg-warning text-dark">Pendiente</span>; break;
+                                        case "Procesando": <span class="badge bg-info text-white">Procesando</span>; break;
+                                        case "Enviado": <span class="badge bg-primary">Enviado</span>; break;
+                                        case "Entregado": <span class="badge bg-success">Entregado</span>; break;
+                                        case "Cancelado": <span class="badge bg-danger">Cancelado</span>; break;
+                                        default: <span class="badge bg-secondary">@pedido.Estado</span>; break;
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">No hay pedidos registrados.</p>
+        }
+    </div>
+</div>

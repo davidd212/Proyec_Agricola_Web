@@ -2,14 +2,14 @@
  * =====================================================
  * JAVASCRIPT PARA MODAL DE DETALLES DE PEDIDO
  * =====================================================
- * Maneja la apertura, carga y visualización de detalles
+ * Maneja la apertura, carga y visualizaciÃ³n de detalles
  */
 
 // Objeto global para gestionar el modal
 var ModalDetallePedido = {
-    
+
     /**
-     * Inicializar el módulo
+     * Inicializar el mÃ³dulo
      */
     init: function() {
         this.cacheElements();
@@ -31,15 +31,15 @@ var ModalDetallePedido = {
      */
     bindEvents: function() {
         var self = this;
-        
-        // Botón descargar PDF
+
+        // BotÃ³n descargar PDF
         this.$btnDescargar.on('click', function() {
             if (self.pedidoActual) {
                 self.descargarPDF(self.pedidoActual.PedidoID);
             }
         });
 
-        // Cerrar modal
+        // Cerrar modal (Bootstrap 5)
         this.$modal.on('hidden.bs.modal', function() {
             self.limpiarModal();
         });
@@ -51,10 +51,10 @@ var ModalDetallePedido = {
      */
     abrirModal: function(pedidoID) {
         var self = this;
-        
+
         // Mostrar spinner de carga
         this.mostrarCarga();
-        
+
         // Obtener datos del pedido
         $.ajax({
             url: '/Pedido/ObtenerDetallePedido',
@@ -65,7 +65,9 @@ var ModalDetallePedido = {
                 if (response.success) {
                     self.pedidoActual = response.data;
                     self.llenarModal(response.data);
-                    self.$modal.modal('show');
+                    // Bootstrap 5 API
+                    var modal = new bootstrap.Modal(self.$modal[0]);
+                    modal.show();
                 } else {
                     self.mostrarError('No se pudo cargar el pedido: ' + response.message);
                 }
@@ -84,7 +86,7 @@ var ModalDetallePedido = {
      * @param {object} pedido - Objeto con datos del pedido
      */
     llenarModal: function(pedido) {
-        // Información general del pedido
+        // InformaciÃ³n general del pedido
         $('#modalNumeroPedido').text('#' + (pedido.NumeroPedido || 'N/A'));
         $('#modalFechaPedido').text(this.formatearFecha(pedido.FechaPedido));
         $('#modalFechaActualizacion').text(this.formatearFecha(pedido.FechaActualizacion));
@@ -93,17 +95,17 @@ var ModalDetallePedido = {
         var badgeHTML = this.obtenerBadgeEstado(pedido.Estado);
         $('#modalEstado').html(badgeHTML);
 
-        // Información de envío
+        // InformaciÃ³n de envÃ­o
         $('#modalDireccionEnvio').text(pedido.DireccionEnvio || 'N/A');
         $('#modalCiudadEnvio').text(pedido.CiudadEnvio || 'N/A');
         $('#modalCodigoPostalEnvio').text(pedido.CodigoPostalEnvio || 'N/A');
-        $('#modalPaisEnvio').text(pedido.PaisEnvio || 'México');
+        $('#modalPaisEnvio').text(pedido.PaisEnvio || 'MÃ©xico');
         $('#modalTelefonoEnvio').text(pedido.TelefonoEnvio || 'N/A');
 
         // Resumen de precios
         $('#modalSubtotal').text(this.formatearMoneda(pedido.Subtotal));
         $('#modalImpuestos').text(this.formatearMoneda(pedido.Impuestos || 0));
-        $('#modalCostoEnvio').text(this.formatearMoneda(pedido.CostoEnvio || 0));
+        $('#modalCostoEnvio').html('<span style="color: #28a745; font-weight: 700;">GRATIS</span>');
         $('#modalTotal').text(this.formatearMoneda(pedido.Total));
 
         // Llenar tabla de productos
@@ -168,7 +170,7 @@ var ModalDetallePedido = {
      */
     formatearFecha: function(fecha) {
         if (!fecha) return 'N/A';
-        
+
         var options = {
             year: 'numeric',
             month: '2-digit',
@@ -176,7 +178,7 @@ var ModalDetallePedido = {
             hour: '2-digit',
             minute: '2-digit'
         };
-        
+
         try {
             return new Date(fecha).toLocaleDateString('es-MX', options);
         } catch (e) {
@@ -185,7 +187,7 @@ var ModalDetallePedido = {
     },
 
     /**
-     * Formatear número como moneda
+     * Formatear nÃºmero como moneda
      * @param {number} cantidad - Cantidad a formatear
      * @returns {string} Cantidad formateada
      */
@@ -203,7 +205,7 @@ var ModalDetallePedido = {
      */
     descargarPDF: function(pedidoID) {
         var self = this;
-        
+
         $.ajax({
             url: '/Pedido/DescargarPDF',
             type: 'GET',
@@ -220,7 +222,7 @@ var ModalDetallePedido = {
                 a.click();
                 window.URL.revokeObjectURL(url);
                 document.body.removeChild(a);
-                
+
                 self.mostrarExito('PDF descargado correctamente');
             },
             error: function(xhr, status, error) {
@@ -230,22 +232,25 @@ var ModalDetallePedido = {
     },
 
     /**
-     * Mostrar animación de carga
+     * Mostrar animaciÃ³n de carga como overlay sin destruir el contenido
      */
     mostrarCarga: function() {
-        var html = `
-            <div class="modal-loading">
-                <div class="spinner-border" style="border-width: 4px;"></div>
-            </div>
-        `;
-        this.$modal.find('.modal-body').html(html);
+        if (this.$modal.find('.modal-loading-overlay').length === 0) {
+            var overlay = `
+                <div class="modal-loading-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center; z-index: 1050; border-radius: 0 0 12px 12px;">
+                    <div class="spinner-border" style="width: 3rem; height: 3rem; border-width: 4px;"></div>
+                </div>
+            `;
+            this.$modal.find('.modal-body').css('position', 'relative').append(overlay);
+        }
     },
 
     /**
-     * Ocultar animación de carga
+     * Ocultar animaciÃ³n de carga
      */
     ocultarCarga: function() {
-        // Se oculta cuando se carga el contenido
+        this.$modal.find('.modal-loading-overlay').remove();
+        this.$modal.find('.modal-body').css('position', '');
     },
 
     /**
@@ -264,14 +269,13 @@ var ModalDetallePedido = {
         var alertHTML = `
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <i class="fas fa-exclamation-circle"></i> ${mensaje}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                 </button>
             </div>
         `;
-        
+
         this.$modal.find('.modal-body').prepend(alertHTML);
-        
+
         setTimeout(function() {
             this.$modal.find('.alert').fadeOut(function() {
                 $(this).remove();
@@ -280,22 +284,21 @@ var ModalDetallePedido = {
     },
 
     /**
-     * Mostrar mensaje de éxito
+     * Mostrar mensaje de Ã©xito
      * @param {string} mensaje - Mensaje a mostrar
      */
     mostrarExito: function(mensaje) {
         var alertHTML = `
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <i class="fas fa-check-circle"></i> ${mensaje}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                 </button>
             </div>
         `;
-        
+
         var $alert = $(alertHTML);
         this.$modal.find('.modal-body').prepend($alert);
-        
+
         setTimeout(function() {
             $alert.fadeOut(function() {
                 $(this).remove();
@@ -305,7 +308,7 @@ var ModalDetallePedido = {
 };
 
 /**
- * Función de ayuda para abrir modal desde HTML
+ * FunciÃ³n de ayuda para abrir modal desde HTML
  * @param {int} pedidoID - ID del pedido
  */
 function abrirDetallePedido(pedidoID) {
@@ -313,7 +316,7 @@ function abrirDetallePedido(pedidoID) {
 }
 
 /**
- * Inicializar cuando el documento esté listo
+ * Inicializar cuando el documento estÃ© listo
  */
 $(document).ready(function() {
     ModalDetallePedido.init();

@@ -184,7 +184,7 @@ namespace Proyec_Agricola_Web.Models
                                        p.FechaCreacion, p.FechaActualizacion, c.Nombre as CategoriaNombre
                                 FROM Productos p
                                 LEFT JOIN Categorias c ON p.CategoriaID = c.CategoriaID
-                                WHERE p.ProductoID != @ProductoID AND p.Activo = 1 AND c.Activa = 1
+                                 WHERE p.ProductoID != @ProductoID AND p.Activo = 1
                                 ORDER BY 
                                     CASE WHEN p.CategoriaID = @CategoriaID THEN 0 ELSE 1 END,
                                     p.Destacado DESC,

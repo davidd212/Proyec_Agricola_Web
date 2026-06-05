@@ -1,84 +1,110 @@
 ﻿@model Proyec_Agricola_Web.Models.Producto
-
 @{
     ViewBag.Title = Model.Nombre + " - AgroVentas";
 }
 
-<div class="container mt-5">
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Producto")">Productos</a></li>
+                <li class="breadcrumb-item active">@Model.Nombre</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
     <div class="row">
-        <div class="col-md-6">
-            <div style="background:#f9fff9; border-radius:16px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
-            @if (!string.IsNullOrEmpty(Model.ImagenRuta))
-            {
-                <img src="@Model.ImagenRuta" class="img-fluid" alt="@Model.Nombre" style="max-height:400px; width:100%; object-fit:contain; border-radius:12px; padding:10px; background:#fff;" onerror="this.onerror=null; this.src='/Content/Images/Productos/no-image.png';" />
-            }
-            else
-            {
-                <div class="bg-light d-flex flex-column align-items-center justify-content-center" style="height:400px; border-radius:12px;">
-                    <i class="fas fa-seedling fa-5x mb-3" style="color:#28a745; opacity:0.2;"></i>
-                    <span class="text-muted">Sin imagen disponible</span>
-                </div>
-            }
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <h2>@Model.Nombre</h2>
-            <hr />
-
-            @if (!string.IsNullOrEmpty(Model.CategoriaNombre))
-            {
-                <p><strong>categoría:</strong> <a href="@Url.Action("Categoria", "Producto", new { id = Model.CategoriaID })">@Model.CategoriaNombre</a></p>
-            }
-
-            <p><strong>Código:</strong> @Model.CodigoProducto</p>
-
-            @if (Model.PrecioDescuento.HasValue && Model.PrecioDescuento > 0)
-            {
-                <h4>
-                    <span class="text-muted"><del>$@Model.Precio.ToString("F2")</del></span>
-                    <span class="text-danger font-weight-bold">$@Model.PrecioDescuento.Value.ToString("F2")</span>
-                </h4>
-                <p class="text-success">
-                    <strong>¡Ahorra: $@(Model.Precio - Model.PrecioDescuento.Value).ToString("F2")!</strong>
-                </p>
-            }
-            else
-            {
-                <h4><span class="text-success font-weight-bold">$@Model.Precio.ToString("F2")</span></h4>
-            }
-
-            <div class="alert @(Model.Stock > 0 ? 'alert-success' : 'alert-danger')">
-                @if (Model.Stock > 0)
+        <div class="col-md-5">
+            <div style="height:420px; border-radius:16px; box-shadow:0 6px 24px rgba(0,0,0,0.1); background:#f9fff9; overflow:hidden;">
+                @if (!string.IsNullOrEmpty(Model.ImagenRuta))
                 {
-                    <strong>En Stock:</strong> @Model.Stock unidades disponibles
+                    <img src="@Model.ImagenRuta" alt="@Model.Nombre"
+                         style="width:100%; height:100%; object-fit:contain; padding:30px;"
+                         onerror="this.onerror=null; this.style.display='none'; document.getElementById('detImgFallback').style.display='flex';" />
+                    <div id="detImgFallback" style="display:none; height:100%; align-items:center; justify-content:center; flex-direction:column;">
+                        <i class="fas fa-seedling fa-5x" style="color:#28a745; opacity:0.2;"></i>
+                    </div>
                 }
                 else
                 {
-                    <strong>Producto Agotado</strong>
+                    <div style="display:flex; align-items:center; justify-content:center; height:100%; flex-direction:column;">
+                        <i class="fas fa-seedling fa-5x" style="color:#28a745; opacity:0.2;"></i>
+                        <span class="text-muted mt-3">Sin imagen disponible</span>
+                    </div>
                 }
             </div>
+        </div>
 
-            @if (Model.Peso.HasValue)
-            {
-                <p><strong>Peso:</strong> @Model.Peso.Value.ToString("F2") kg</p>
-            }
+        <div class="col-md-7">
+            <span style="display:inline-block; background:#e8f5e9; color:#2e7d32; padding:4px 14px; border-radius:20px; font-size:0.85rem; font-weight:600; margin-bottom:12px;">
+                @Model.CategoriaNombre
+            </span>
+
+            <h1 style="color:#1a1a1a; font-weight:700; margin-bottom:20px;">@Model.Nombre</h1>
 
             @if (Model.Calificacion.HasValue)
             {
-                <p>
-                    <strong>Calificación:</strong>
+                <div class="mb-3">
                     @for (int i = 0; i < (int)Model.Calificacion; i++)
                     {
-                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star" style="color:#ffc107;"></i>
                     }
-                    (@Model.Calificacion.Value.ToString("F1")/)
+                    @if ((Model.Calificacion.Value - (int)Model.Calificacion) >= 0.5m)
+                    {
+                        <i class="fas fa-star-half-alt" style="color:#ffc107;"></i>
+                    }
+                    <span class="ms-2 text-muted">(@Model.Calificacion.Value.ToString("F1"))</span>
+                </div>
+            }
+
+            @if (Model.PrecioDescuento.HasValue && Model.PrecioDescuento > 0)
+            {
+                <div class="mb-4">
+                    <h2 style="color:#2e7d32; font-weight:700;">
+                        $@Model.PrecioDescuento.Value.ToString("F2")
+                        <span style="font-size:1rem; color:#999; text-decoration:line-through; font-weight:400; margin-left:10px;">$@Model.Precio.ToString("F2")</span>
+                    </h2>
+                    <p style="color:#28a745; font-weight:600;">
+                        <i class="fas fa-tag"></i> ¡Ahorra $@((Model.Precio - Model.PrecioDescuento.Value).ToString("F2"))!
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div class="mb-4">
+                    <h2 style="color:#2e7d32; font-weight:700;">$@Model.Precio.ToString("F2")</h2>
+                </div>
+            }
+
+            @if (Model.Stock > 0)
+            {
+                <p style="color:#28a745; font-weight:600;">
+                    <i class="fas fa-check-circle"></i> En stock (@Model.Stock unidades disponibles)
                 </p>
+            }
+            else
+            {
+                <p style="color:#dc3545; font-weight:600;">
+                    <i class="fas fa-times-circle"></i> Producto Agotado
+                </p>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.CodigoProducto))
+            {
+                <p style="color:#666; font-size:0.9rem;"><strong>Código:</strong> @Model.CodigoProducto</p>
+            }
+
+            @if (Model.Peso.HasValue)
+            {
+                <p style="color:#666; font-size:0.9rem;"><strong>Peso:</strong> @Model.Peso.Value.ToString("F2") kg</p>
             }
 
             <hr />
 
-            <h5>Descripción</h5>
+            <h5 style="color:#1a1a1a; font-weight:600;">Descripción</h5>
             <p>@Html.Raw(Model.Descripcion)</p>
 
             <hr />
@@ -86,74 +112,174 @@
             @if (Session["TipoUsuario"] != null && Convert.ToInt32(Session["TipoUsuario"]) == 1)
             {
                 <div class="alert alert-warning">
-                    <i class="fa fa-shield"></i> Eres administrador, no puedes comprar. 
-                    <a href="@Url.Action("Editar", "Producto", new { id = Model.ProductoID })">Editar este producto</a>
+                    <i class="fa fa-shield"></i> Eres administrador, no puedes comprar.
+                    <a href="@Url.Action("Editar", "Producto", new { id = Model.ProductoID })" class="alert-link">Editar este producto</a>
                 </div>
             }
             else
             {
-                <div class="form-group">
-                    <label for="cantidad">Cantidad:</label>
-                    <input type="number" id="cantidad" min="1" max="@Model.Stock" value="1" class="form-control" style="width: 150px;" />
+                <div class="mb-4">
+                    <label style="color:#1a1a1a; font-weight:600; display:block; margin-bottom:8px;">Cantidad</label>
+                    <div style="display:flex; align-items:center; width:150px; border:1px solid #ced4da; border-radius:8px; overflow:hidden;">
+                        <button type="button" style="border:none; background:#f8f9fa; padding:8px 14px; cursor:pointer; font-size:1.1rem; font-weight:600; color:#555;" onclick="cambiarCantidad(-1)">-</button>
+                        <input id="cantidad" type="number" value="1" min="1" max="@Model.Stock"
+                               style="border:none; text-align:center; width:60px; padding:8px 0; font-size:1rem; outline:none; -moz-appearance:textfield;"
+                               onkeydown="return false" />
+                        <button type="button" style="border:none; background:#f8f9fa; padding:8px 14px; cursor:pointer; font-size:1.1rem; font-weight:600; color:#555;" onclick="cambiarCantidad(1)">+</button>
+                    </div>
                 </div>
 
-                <button class="btn btn-success btn-lg" onclick="AgregarAlCarrito(@Model.ProductoID)" @(Model.Stock <= 0 ? 'disabled' : '')>
-                    <i class="fa fa-shopping-cart"></i> Agregar al Carrito
-                </button>
-
-                <button class="btn btn-outline-primary btn-lg">
-                    <i class="fa fa-heart"></i> Agregar a Favoritos
-                </button>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button class="btn btn-success btn-lg" onclick="AgregarAlCarrito(@Model.ProductoID)" style="border-radius:10px; font-weight:600; padding:12px 30px;">
+                        <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                    </button>
+                    <button class="btn btn-outline-primary btn-lg" style="border-radius:10px; font-weight:600; padding:12px 30px;">
+                        <i class="fas fa-heart"></i> Favoritos
+                    </button>
+                </div>
             }
 
-            <div class="mt-4">
-                <a href="@Url.Action("Index", "Producto")" class="btn btn-secondary">
-                    <i class="fa fa-arrow-left"></i> Volver al Catálogo
-                </a>
+            <div class="mt-5 pt-4 border-top">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h6 style="color:#1a1a1a; font-weight:600;"><i class="fas fa-truck"></i> Envío</h6>
+                        <p class="text-muted">Envío gratis a partir de 50€</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 style="color:#1a1a1a; font-weight:600;"><i class="fas fa-shield-alt"></i> Garantía</h6>
+                        <p class="text-muted">Garantía de satisfacción 100%</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 style="color:#1a1a1a; font-weight:600;"><i class="fas fa-undo"></i> Devoluciones</h6>
+                        <p class="text-muted">Devuelve en 30 días sin preguntas</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 style="color:#1a1a1a; font-weight:600;"><i class="fas fa-lock"></i> Pago Seguro</h6>
+                        <p class="text-muted">Transacciones 100% seguras</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="row mt-5">
-        <div class="col-md-12">
-            <h3>Productos Relacionados</h3>
-            <hr />
-            <p class="text-muted">Otros productos de la misma categoría...</p>
+    <div class="mt-5 pt-5 border-top">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+            <h3 style="color:#1a1a1a; font-weight:700; margin:0;">
+                <i class="fas fa-link" style="color:#2e7d32;"></i> Productos Relacionados
+            </h3>
+            <a href="@Url.Action("Index", "Producto")" style="border-radius:20px; padding:6px 18px; font-weight:500; flex-shrink:0; border:1px solid #28a745; color:#28a745; text-decoration:none; font-size:0.875rem;">
+                Ver todos <i class="fas fa-arrow-right ms-1"></i>
+            </a>
         </div>
+        @{
+            var productosRelacionados = ViewBag.ProductosRelacionados as List<Proyec_Agricola_Web.Models.Producto>;
+        }
+        @if (productosRelacionados != null && productosRelacionados.Count > 0)
+        {
+            <div style="overflow-x:auto; overflow-y:hidden; padding-bottom:10px; -webkit-overflow-scrolling:touch;">
+                <div style="display:flex; gap:16px; min-width:min-content;">
+                    @foreach (var productoRel in productosRelacionados)
+                    {
+                        bool esMismaCategoria = productoRel.CategoriaID == Model.CategoriaID;
+                        <div style="flex:0 0 200px; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,0.06); transition:all 0.3s ease; cursor:pointer; overflow:hidden; background:white;"
+                             onmouseover="this.style.boxShadow='0 8px 30px rgba(0,0,0,0.12)'; this.style.transform='translateY(-4px)'"
+                             onmouseout="this.style.boxShadow='0 2px 12px rgba(0,0,0,0.06)'; this.style.transform='translateY(0)'"
+                             onclick="window.location='@Url.Action("Detalle", "Producto", new { id = productoRel.ProductoID })'">
+                            <div style="position:relative; height:160px; background:linear-gradient(135deg, #f8fff8 0%, #f0faf0 100%); overflow:hidden;">
+                                @if (!esMismaCategoria)
+                                {
+                                    <span style="position:absolute; top:8px; left:8px; background:linear-gradient(135deg, #FFC107, #FFA000); color:#333; padding:3px 10px; border-radius:20px; font-size:0.65rem; font-weight:700; z-index:10; box-shadow:0 2px 8px rgba(255,193,7,0.4);">
+                                        <i class="fas fa-star me-1"></i> Destacado
+                                    </span>
+                                }
+                                @if (!string.IsNullOrEmpty(productoRel.ImagenRuta))
+                                {
+                                    <img src="@productoRel.ImagenRuta" alt="@productoRel.Nombre"
+                                         style="width:100%; height:100%; object-fit:contain; padding:16px; transition:transform 0.3s ease;"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                         onmouseover="this.style.transform='scale(1.08)'"
+                                         onmouseout="this.style.transform='scale(1)'" />
+                                }
+                                <div style="display: @(string.IsNullOrEmpty(productoRel.ImagenRuta) ? "flex" : "none"); align-items:center; justify-content:center; flex-direction:column; height:100%; background:linear-gradient(135deg, #f8fff8 0%, #f0faf0 100%);">
+                                    <i class="fas fa-seedling fa-3x" style="color:#28a745; opacity:0.15;"></i>
+                                </div>
+                                <div style="position:absolute; bottom:0; left:0; right:0; height:30px; background:linear-gradient(transparent, rgba(255,255,255,0.8));"></div>
+                            </div>
+                            <div style="padding:12px;">
+                                <span style="font-size:0.65rem; text-transform:uppercase; letter-spacing:0.5px; color:@(esMismaCategoria ? "#2e7d32" : "#6C757D"); font-weight:600;">
+                                    @productoRel.CategoriaNombre
+                                    @if (!esMismaCategoria)
+                                    {
+                                        <i class="fas fa-star" style="color:#FFC107; margin-left:4px; font-size:0.6rem;"></i>
+                                    }
+                                </span>
+                                <h6 style="font-size:0.85rem; font-weight:600; color:#1a1a1a; margin:4px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                                    @productoRel.Nombre
+                                </h6>
+                                <div style="font-size:0.95rem; font-weight:700; color:#2e7d32; margin:4px 0;">
+                                    @productoRel.Precio.ToString("C")
+                                </div>
+                                <button style="border-radius:25px; background:linear-gradient(135deg, #2e7d32, #1b5e20); color:white; font-weight:600; font-size:0.75rem; padding:6px 10px; border:none; transition:all 0.3s ease; width:100%; cursor:pointer;"
+                                        onmouseover="this.style.boxShadow='0 4px 15px rgba(46,125,50,0.4)'"
+                                        onmouseout="this.style.boxShadow='none'"
+                                        onclick="event.stopPropagation(); window.location='@Url.Action("Detalle", "Producto", new { id = productoRel.ProductoID })'">
+                                    <i class="fas fa-eye me-1"></i> Ver Detalles
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <div style="text-align:center; padding:40px 0; background:linear-gradient(135deg, #f8fff8 0%, #f0faf0 100%); border-radius:16px;">
+                <i class="fas fa-box-open fa-3x" style="color:#28a745; opacity:0.2; margin-bottom:15px;"></i>
+                <p class="text-muted mb-0" style="font-size:1rem;">No hay productos relacionados disponibles en esta categoría.</p>
+            </div>
+        }
     </div>
 </div>
 
 <script type="text/javascript">
-function AgregarAlCarrito(productoID) {
-    var cantidad = parseInt($('#cantidad').val());
-
-    if (cantidad <= 0) {
-        alert('Por favor ingresa una cantidad válida');
-        return;
+    function cambiarCantidad(delta) {
+        var input = document.getElementById('cantidad');
+        var val = parseInt(input.value) + delta;
+        var max = parseInt(input.max);
+        if (val < 1) val = 1;
+        if (val > max) val = max;
+        input.value = val;
     }
 
-    $.ajax({
-        url: '@Url.Action("Agregar", "Carrito")',
-        type: 'POST',
-        data: {
-            productoID: productoID,
-            cantidad: cantidad
-        },
-        success: function (response) {
-            if (response.success) {
-                alert(response.message);
-                $('#cantidad').val(1);
-                // Redirigir al carrito después de 2 segundos
-                setTimeout(function () {
-                    window.location.href = '@Url.Action("Index", "Carrito")';
-                }, 2000);
-            } else {
-                alert(response.message);
-            }
-        },
-        error: function () {
-            alert('Error al agregar el producto al carrito');
+    function AgregarAlCarrito(productoID) {
+        var cantidad = parseInt(document.getElementById('cantidad').value);
+
+        if (cantidad <= 0) {
+            alert('Por favor ingresa una cantidad válida');
+            return;
         }
-    });
-}
+
+        $.ajax({
+            url: '@Url.Action("Agregar", "Carrito")',
+            type: 'POST',
+            data: {
+                productoID: productoID,
+                cantidad: cantidad
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    document.getElementById('cantidad').value = 1;
+                    setTimeout(function () {
+                        window.location.href = '@Url.Action("Index", "Carrito")';
+                    }, 2000);
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert('Error al agregar el producto al carrito');
+            }
+        });
+    }
 </script>
