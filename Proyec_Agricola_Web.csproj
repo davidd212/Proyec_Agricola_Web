@@ -125,6 +125,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PedidoController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
+    <Compile Include="Filters\AdminLayoutAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -172,20 +173,12 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="PROYECTO_COMPLETADO.txt" />
-    <Content Include="RESUMEN_FINAL.txt" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="IMPLEMENTACION_GUIA.md" />
-    <Content Include="REFERENCIA_RAPIDA.md" />
-    <Content Include="RESUMEN_VISUAL.md" />
-    <Content Include="INDICE_DOCUMENTACION.md" />
-    <Content Include="GUIA_EJECUTAR_SQL.md" />
-    <Content Include="README.md" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -229,7 +222,7 @@
     <Content Include="Views\Pedido\Historial.cshtml" />
     <Content Include="Views\Pedido\Detalle.cshtml" />
     <Content Include="Views\Pedido\DetalleModal.cshtml" />
-    <Content Include="VERIFICACION_CHECKLIST.md" />
+    <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

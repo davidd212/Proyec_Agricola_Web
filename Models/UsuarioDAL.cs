@@ -105,6 +105,42 @@ namespace Proyec_Agricola_Web.Models
             return usuarios;
         }
 
+        public List<Usuario> ObtenerUsuariosRecientes(int cantidad)
+        {
+            List<Usuario> usuarios = new List<Usuario>();
+
+            using (SqlConnection con = new SqlConnection(conexion))
+            {
+                string query = "SELECT TOP " + cantidad + " * FROM Usuarios WHERE Activo = 1 ORDER BY UsuarioID DESC";
+                SqlCommand cmd = new SqlCommand(query, con);
+
+                con.Open();
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        usuarios.Add(new Usuario
+                        {
+                            UsuarioID = Convert.ToInt32(dr["UsuarioID"]),
+                            Nombre = dr["Nombre"].ToString(),
+                            Apellido_Paterno = dr["Apellido_Paterno"].ToString(),
+                            Apellido_Materno = dr["Apellido_Materno"].ToString(),
+                            Email = dr["Email"].ToString(),
+                            Telefono = dr["Telefono"].ToString(),
+                            Direccion = dr["Direccion"].ToString(),
+                            Ciudad = dr["Ciudad"].ToString(),
+                            CodigoPostal = dr["CodigoPostal"].ToString(),
+                            Genero = dr["Genero"].ToString(),
+                            TipoUsuario = Convert.ToInt32(dr["TipoUsuario"]),
+                            Estado = Convert.ToBoolean(dr["Activo"])
+                        });
+                    }
+                }
+            }
+
+            return usuarios;
+        }
+
         public bool RegistrarUsuario(Usuario usuario)
         {
             try

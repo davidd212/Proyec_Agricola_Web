@@ -1,16 +1,30 @@
+using Proyec_Agricola_Web.Filters;
 using Proyec_Agricola_Web.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
 namespace Proyec_Agricola_Web.Controllers
 {
+    public class ActividadItem
+    {
+        public string Tipo { get; set; }
+        public string Descripcion { get; set; }
+        public DateTime Fecha { get; set; }
+        public string Icono { get; set; }
+        public string Color { get; set; }
+        public string Fondo { get; set; }
+    }
+
+    [AdminLayout]
     public class AdminController : Controller
     {
         private ProductoDAL productDAL = new ProductoDAL();
         private PedidoDAL pedidoDAL = new PedidoDAL();
         private MensajeDAL mensajeDAL = new MensajeDAL();
         private UsuarioDAL usuarioDAL = new UsuarioDAL();
+        private CategoriaDAL categoriaDAL = new CategoriaDAL();
 
         private bool EsAdmin()
         {
@@ -52,7 +66,86 @@ namespace Proyec_Agricola_Web.Controllers
             ViewBag.UltimosPedidos = todosPedidos.Take(5).ToList();
             ViewBag.IngresosTotales = todosPedidos.Where(p => p.Estado != "Cancelado").Sum(p => p.Total);
 
+            // --- Datos reales para gráficos y actividad ---
+
+            // Ventas por categoría
+            ViewBag.VentasPorCategoria = pedidoDAL.ObtenerVentasPorCategoria();
+
+            // Actividad reciente (combinar usuarios, pedidos y mensajes recientes)
+            var usuariosRecientes = usuarioDAL.ObtenerUsuariosRecientes(3);
+            var pedidosRecientes = todosPedidos.Take(3).ToList();
+            var mensajesRecientes = mensajeDAL.ObtenerTodosMensajes().Take(3).ToList();
+
+            var actividad = new List<ActividadItem>();
+            foreach (var u in usuariosRecientes)
+            {
+                actividad.Add(new ActividadItem
+                {
+                    Tipo = "usuario",
+                    Descripcion = $"Nuevo usuario registrado: {u.Nombre} {u.Apellido_Paterno}",
+                    Fecha = DateTime.Now,
+                    Icono = "user-plus",
+                    Color = "#2e7d32",
+                    Fondo = "#e8f5e9"
+                });
+            }
+            foreach (var p in pedidosRecientes)
+            {
+                actividad.Add(new ActividadItem
+                {
+                    Tipo = "pedido",
+                    Descripcion = $"Pedido #{p.PedidoID} {p.Estado.ToLower()}.",
+                    Fecha = p.FechaPedido,
+                    Icono = "shopping-bag",
+                    Color = "#E65100",
+                    Fondo = "#fff3e0"
+                });
+            }
+            foreach (var m in mensajesRecientes)
+            {
+                actividad.Add(new ActividadItem
+                {
+                    Tipo = "mensaje",
+                    Descripcion = $"Mensaje de contacto recibido de '{m.Nombre}'.",
+                    Fecha = m.FechaEnvio,
+                    Icono = "envelope",
+                    Color = "#1565C0",
+                    Fondo = "#e3f2fd"
+                });
+            }
+
+            ViewBag.ActividadReciente = actividad.OrderByDescending(a => a.Fecha).Take(6).ToList();
+
+            // Productos por categoría para gráfico
+            var categorias = categoriaDAL.ObtenerTodasCategorias();
+            var productosPorCategoria = new Dictionary<string, int>();
+            foreach (var cat in categorias)
+            {
+                int count = todosProductos.Count(p => p.CategoriaID == cat.CategoriaID);
+                if (count > 0)
+                    productosPorCategoria[cat.Nombre] = count;
+            }
+            ViewBag.ProductosPorCategoria = productosPorCategoria;
+
             return View();
+        }
+
+        public ActionResult GestionarProductos()
+        {
+            var redirect = RedirectSiNoAdmin();
+            if (redirect != null) return redirect;
+
+            var productos = productDAL.ObtenerTodosProductos();
+            return View(productos);
+        }
+
+        public ActionResult GestionarUsuarios()
+        {
+            var redirect = RedirectSiNoAdmin();
+            if (redirect != null) return redirect;
+
+            var usuarios = usuarioDAL.ObtenerTodosUsuarios();
+            return View(usuarios);
         }
 
         public ActionResult Pedidos(string estado, DateTime? desde, DateTime? hasta)

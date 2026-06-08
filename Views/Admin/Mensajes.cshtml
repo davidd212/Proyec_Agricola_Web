@@ -64,12 +64,12 @@
                                     </span>
                                 </td>
                                 <td style="padding:14px 12px; color:#666; font-size:0.9rem;">@mensaje.FechaEnvio.ToString("dd/MM/yyyy HH:mm")</td>
-                                <td style="padding:14px 12px;">
-                                    <a href="@Url.Action("VerMensaje", "Admin", new { id = mensaje.MensajeID })" class="btn btn-sm btn-outline-success" style="border-radius:20px;">
+                                <td style="padding:14px 12px; white-space:nowrap;">
+                                    <a href="@Url.Action("VerMensaje", "Admin", new { id = mensaje.MensajeID })" class="btn btn-sm btn-outline-success" style="border-radius:20px; font-weight:600; padding:6px 14px;">
                                         <i class="fas fa-eye"></i> Ver
                                     </a>
-                                    <button class="btn btn-sm btn-outline-danger" style="border-radius:20px;" onclick="eliminarMensaje(@mensaje.MensajeID)">
-                                        <i class="fas fa-trash"></i>
+                                    <button class="btn btn-sm btn-danger" style="border-radius:20px; font-weight:600; padding:6px 14px;" onclick="eliminarMensaje(@mensaje.MensajeID)">
+                                        <i class="fas fa-trash"></i> Eliminar
                                     </button>
                                 </td>
                             </tr>

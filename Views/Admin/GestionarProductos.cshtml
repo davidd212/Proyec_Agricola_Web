@@ -1,0 +1,169 @@
+@model List<Proyec_Agricola_Web.Models.Producto>
+
+@{
+    ViewBag.Title = "Productos - Administración";
+}
+
+<div class="bg-light py-3 border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Dashboard", "Admin")">Dashboard</a></li>
+                <li class="breadcrumb-item active">Productos</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success" style="border-radius:12px;">@TempData["Mensaje"]</div>
+    }
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h1 style="color:#1a1a1a; font-weight:700; margin:0;">
+            <i class="fas fa-box" style="color:#2e7d32;"></i> Productos
+        </h1>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <span style="background:#e8f5e9; color:#2e7d32; padding:6px 16px; border-radius:20px; font-weight:600; font-size:0.9rem;">
+                @Model.Count producto(s)
+            </span>
+            <a href="@Url.Action("Crear", "Producto")" class="btn btn-success" style="border-radius:8px;">
+                <i class="fas fa-plus"></i> Nuevo Producto
+            </a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function eliminarProducto(id, nombre) {
+        if (!confirm('¿Eliminar el producto "' + nombre + '"?')) return;
+
+        $.ajax({
+            url: '@Url.Action("Eliminar", "Producto")',
+            type: 'POST',
+            data: { id: id },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert('Error al eliminar el producto.');
+            }
+        });
+    }
+</script>
+
+    <div style="background:white; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,0.06); overflow:hidden;">
+        @if (Model != null && Model.Count > 0)
+        {
+            <div style="overflow-x:auto;">
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead style="background:#2e7d32; color:white;">
+                        <tr>
+                            <th style="padding:14px 12px; text-align:left;">Producto</th>
+                            <th style="padding:14px 12px; text-align:left;">Categoría</th>
+                            <th style="padding:14px 12px; text-align:right;">Precio</th>
+                            <th style="padding:14px 12px; text-align:right;">Stock</th>
+                            <th style="padding:14px 12px; text-align:center;">Destacado</th>
+                            <th style="padding:14px 12px; text-align:center;">Carrito</th>
+                            <th style="padding:14px 12px; text-align:center;">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var prod in Model)
+                        {
+                            <tr style="border-bottom:1px solid #f0f0f0;">
+                                <td style="padding:12px;">
+                                    <div style="display:flex; align-items:center; gap:12px;">
+                                        @if (!string.IsNullOrEmpty(prod.ImagenRuta))
+                                        {
+                                            <img src="@prod.ImagenRuta" style="width:48px; height:48px; object-fit:contain; border-radius:8px; background:#f8fff8;" />
+                                        }
+                                        else
+                                        {
+                                            <div style="width:48px; height:48px; background:#e8f5e9; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                                                <i class="fas fa-leaf" style="color:#2e7d32;"></i>
+                                            </div>
+                                        }
+                                        <div>
+                                            <div style="font-weight:600; color:#1a1a1a;">@prod.Nombre</div>
+                                            <div style="font-size:0.8rem; color:#999;">@prod.CodigoProducto</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="padding:12px; color:#555;">@prod.CategoriaNombre</td>
+                                <td style="padding:12px; text-align:right; font-weight:600;">
+                                    @if (prod.PrecioDescuento.HasValue)
+                                    {
+                                        <span style="color:#999; text-decoration:line-through; font-size:0.85rem;">$@prod.Precio.ToString("F2")</span><br />
+                                        <span style="color:#d32f2f;">$@prod.PrecioDescuento.Value.ToString("F2")</span>
+                                    }
+                                    else
+                                    {
+                                        <span>$@prod.Precio.ToString("F2")</span>
+                                    }
+                                </td>
+                                <td style="padding:12px; text-align:right;">
+                                    @if (prod.Stock <= 5)
+                                    {
+                                        <span style="color:#d32f2f; font-weight:600;">@prod.Stock</span>
+                                    }
+                                    else if (prod.Stock <= 10)
+                                    {
+                                        <span style="color:#f57c00; font-weight:600;">@prod.Stock</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@prod.Stock</span>
+                                    }
+                                </td>
+                                <td style="padding:12px; text-align:center;">
+                                    @if (prod.Destacado)
+                                    {
+                                        <i class="fas fa-star" style="color:#f9a825;"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-star" style="color:#e0e0e0;"></i>
+                                    }
+                                </td>
+                                <td style="padding:12px; text-align:center;">
+                                    @if (prod.ActivoCarrito)
+                                    {
+                                        <span class="badge bg-success">Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Inactivo</span>
+                                    }
+                                </td>
+                                <td style="padding:12px; text-align:center; white-space:nowrap;">
+                                    <a href="@Url.Action("Editar", "Producto", new { id = prod.ProductoID })" class="btn btn-sm btn-warning" style="border-radius:20px; font-weight:600; padding:6px 14px; margin-right:6px;" title="Editar">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
+                                    <button class="btn btn-sm btn-danger" style="border-radius:20px; font-weight:600; padding:6px 14px;" title="Eliminar"
+                                            onclick="eliminarProducto(@prod.ProductoID, '@prod.Nombre.Replace("'", "\\'")')">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div style="text-align:center; padding:60px 20px;">
+                <i class="fas fa-box-open fa-3x" style="color:#28a745; opacity:0.2; margin-bottom:15px;"></i>
+                <p class="text-muted">No hay productos registrados.</p>
+            </div>
+        }
+    </div>
+</div>

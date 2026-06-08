@@ -175,6 +175,36 @@ namespace Proyec_Agricola_Web.Models
             }
         }
 
+        public Dictionary<string, decimal> ObtenerVentasPorCategoria()
+        {
+            var ventas = new Dictionary<string, decimal>();
+
+            using (SqlConnection con = new SqlConnection(conexion))
+            {
+                string query = @"SELECT c.Nombre AS CategoriaNombre, ISNULL(SUM(pd.PrecioTotal), 0) AS TotalVentas
+                                FROM PedidoDetalle pd
+                                INNER JOIN Productos p ON pd.ProductoID = p.ProductoID
+                                INNER JOIN Categorias c ON p.CategoriaID = c.CategoriaID
+                                INNER JOIN Pedidos pe ON pd.PedidoID = pe.PedidoID
+                                WHERE pe.Estado != 'Cancelado'
+                                GROUP BY c.Nombre
+                                ORDER BY TotalVentas DESC";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                con.Open();
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        ventas[dr["CategoriaNombre"].ToString()] = Convert.ToDecimal(dr["TotalVentas"]);
+                    }
+                }
+            }
+
+            return ventas;
+        }
+
         private string GenerarNumeroPedido()
         {
             return "AGR-" + DateTime.Now.ToString("yyyyMMdd") + "-" + Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
